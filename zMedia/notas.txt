@@ -1,0 +1,31 @@
+El servidor de django no trabaja por defecto con archivos de multimedia.
+Para poder mostrar imágenes en el proyecto se hacen diferentes
+configuraciones:
+
+1) Crear en la raiz del proyecto una carpeta en donde se guarden las imagenes
+   En este caso "zMedia". Notar que la carpeta no está dentro de ninguna
+   aplicación.
+
+2) Editar archivo "settings.py" en el proyecto.
+   
+   Especificar la url publica para los archivos.
+   MEDIA_URL = '/zMedia/'
+
+   Especificar la ruta a la carpeta en donde están los archivos multimedia.
+   MEDIA_ROOT = os.path.join(BASE_DIR, 'zMedia')
+
+3) Editar el campo del modelo de tipo "ImageField" y pasar como parametro la "subcarpeta"
+   dentro de "zMedia" en donde debe guardar las imagenes de ese modelo
+
+4) Importar en las rutas de la aplicacion el archivo "settings" para poder usar
+   las rutas argegadas en el paso 2
+   "from django.conf import settings"
+   "from django.conf.urls.static import static"
+
+5) Agregar a "urlpatterns" de la aplicacion las rutas de especificadas
+   en el archivo settings.py
+   
+   urlpatterns+= static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+6) Para mostrar la imagen en el template:
+   <img src="{{ objeto.campoConImagen.url }}">

@@ -28,8 +28,9 @@ class Alumno(models.Model):
     
     fecha_nacimiento = models.DateField()
 
-    DniImg = models.ImageField()
-    Autorizacion = models.ImageField()
+    # "upload_to" especifica la subcarpeta dentro de "zMedia" en donde se van a subir las imagenes
+    DniImg = models.ImageField(upload_to='alumnos')
+    Autorizacion = models.ImageField(upload_to='alumnos')
 
     Telefono = models.CharField(max_length=20)
     #email= es el campo "email" de AbstractUser
