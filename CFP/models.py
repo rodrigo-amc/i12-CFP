@@ -12,8 +12,8 @@ class Localidad(models.Model):
 class diaHora(models.Model):
     opcionDias = [
         ('L', 'Lunes'),
-        ('Ma', 'Martes'),
-        ('Mi', 'Miercoles'),
+        ('MA', 'Martes'),
+        ('MI', 'Miercoles'),
         ('J', 'Jueves'),
         ('V', 'Viernes'),
         ('S', 'Sabado'),

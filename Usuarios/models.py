@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-#from Carreras.models import Carrera
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models.deletion import DO_NOTHING
 from CFP.models import Localidad, Curso
@@ -25,17 +24,17 @@ class Alumno(models.Model):
     #apellido = es el campo "last_name" de AbstractUser
     usr_alumno = models.OneToOneField(appUser, on_delete=models.CASCADE, primary_key=True)
 
-    dni = models.PositiveIntegerField(unique=True, validators=[MinValueValidator(20000000), MaxValueValidator(99999999)])
+    Dni = models.PositiveIntegerField(unique=True, validators=[MinValueValidator(20000000), MaxValueValidator(99999999)])
     
     fecha_nacimiento = models.DateField()
 
-    dniImg = models.ImageField()
-    autorizacion = models.ImageField()
+    DniImg = models.ImageField()
+    Autorizacion = models.ImageField()
 
-    telefono = models.CharField(max_length=20)
+    Telefono = models.CharField(max_length=20)
     #email= es el campo "email" de AbstractUser
     #OJO edité "AbstractUser" (/django/contrib/auth/models.py) para que el campo email sea único
-    domicilio = models.CharField(max_length=100)
+    Domicilio = models.CharField(max_length=100)
 
     localidad = models.ForeignKey(Localidad, on_delete=DO_NOTHING)
 
