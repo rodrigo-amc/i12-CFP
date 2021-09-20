@@ -27,6 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Modelo que se usa para la autenticación
+AUTH_USER_MODEL = 'Usuarios.appUser'
+
+#Indica a donde se dirige cuando hace login y logout
+LOGIN_REDIRECT_URL = '/menu'
+LOGOUT_REDIRECT_URL = '/'
 
 # Application definition
 
@@ -38,7 +44,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'crispy_forms',
+    'Usuarios',
 ]
+
+
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumno | {{titulo}} </title>
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'AlumnosApp/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'AlumnosApp/css/estilos.css' %}">
+
+</head>
+<body>
+    <section class="container">
+        <!--
+            ----------------------------------------------------------------
+                                    BARRA NAVEGACION
+            ----------------------------------------------------------------
+        -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="{% url 'menu' %}">Alumno</a>
+            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'inscMaterias' %}" id="navbarDropdownMenuLink" >
+                            Inscribir En Materia
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="navbarDropdownMenuLink" >
+                            Inscribir En Mesa De Final
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="navbarDropdownMenuLink" >
+                            Consultar Asistencia
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="navbarDropdownMenuLink" >
+                            Consultar Notas
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="navbarDropdownMenuLink" >
+                            Editar Datos Personales
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link " href="{% url 'logout' %}">Cerrar Sesion</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--
+            ----------------------------------------------------------------
+                                    FIN BARRA NAVEGACION
+            ----------------------------------------------------------------
+        -->
+
+        <section class="container">
+            <p class="h3">{{user.first_name}} {{user.last_name}} </p>
+            <p class="h6"> {{carrera}} | Resolucion {{resolucion}} </p>
+            <p class="h3 text-center mt-2"> {{titulo}} </p>
+
+            {% block Contenido %}
+            
+            {% endblock Contenido %}
+            
+        </section>
+    </section>
+
+
+    <!--JS jQuery, Popper, Bootstrap-->
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script src="../../js/popper.min.js"></script>
+    <script src="../../js/bootstrap.min.js"></script>
+</body>
+</html>
