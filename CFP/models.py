@@ -31,6 +31,8 @@ class CentroDeFormacion(models.Model):
     domicilio = models.CharField(max_length=150)
     email = models.EmailField()
 
+    def __str__(self):
+        return self.nombre
 
 
 class Curso(models.Model):

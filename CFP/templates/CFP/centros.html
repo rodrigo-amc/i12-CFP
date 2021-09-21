@@ -1,0 +1,13 @@
+{% extends 'Usuarios/menuAdmin.html' %}
+
+{% block Contenido %}
+    
+    {% for centro in centrosForm %}
+        <p>
+            {{centro}}
+            <a href="{% url 'centrosEditar' centro.id %}" class="btn btn-warning">Editar</a>
+            <a href="{% url 'centrosBorrar' centro.id %}" class="btn btn-danger">Borrar</a>
+        </p>
+    {% endfor %}
+        
+{% endblock Contenido %}

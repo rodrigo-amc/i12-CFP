@@ -1,0 +1,17 @@
+{% extends 'Usuarios/menuAdmin.html' %}
+
+
+{% block Contenido %}
+
+    {% load crispy_forms_tags %}
+    
+    <form action="" method="post" autocomplete="off">
+        {% csrf_token %}
+        {{form | crispy}}
+
+        <input type="submit" class="btn btn-success" value="Guardar">
+        <a href="{% url 'centros' %}" class="btn btn-danger">Cancelar</a>
+    </form>
+    
+{% endblock Contenido %}
+    
