@@ -1,0 +1,13 @@
+{% extends 'Usuarios/menuAdmin.html' %}
+
+{% block Contenido %}
+    
+    {% for localidad in lstLocalidades %}
+        <p>
+            {{localidad}}
+            <a href="{% url 'localidadEditar' localidad.id %}" class="btn btn-warning">Editar</a>
+            <a href="{% url 'localidadBorrar' localidad.id %}" class="btn btn-danger">Borrar</a>
+        </p>
+    {% endfor %}
+        
+{% endblock Contenido %}

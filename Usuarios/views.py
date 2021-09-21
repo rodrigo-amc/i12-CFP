@@ -22,7 +22,7 @@ def menu(request):
     } """
     if request.user.is_superuser:
         adminCtxt={
-            'titulo':'Menu Alumno'
+            'titulo':'Menu Administracion'
         }
         return render(request, 'Usuarios/menuAdmin.html', adminCtxt)
     
@@ -31,7 +31,7 @@ def menu(request):
         #carrera = Carrera.objects.get(id=alumno.carrera_id)
         #resolucion = carrera.resolucion
         aluCtxt={
-            'titulo' : 'Menu Principal',
+            'titulo' : 'Menu Alumno',
          #   'carrera':carrera,
          #   'resolucion': resolucion,
         }

@@ -8,6 +8,8 @@ from django.core.validators import MinValueValidator
 # region Utiles
 class Localidad(models.Model):
     nombre = models.CharField(max_length=50)
+    def __str__(self):
+        return self.nombre
 
 class diaHora(models.Model):
     opcionDias = [
