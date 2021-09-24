@@ -12,16 +12,11 @@ class Localidad(models.Model):
         return self.nombre
 
 class diaHora(models.Model):
-    opcionDias = [
-        ('L', 'Lunes'),
-        ('MA', 'Martes'),
-        ('MI', 'Miercoles'),
-        ('J', 'Jueves'),
-        ('V', 'Viernes'),
-        ('S', 'Sabado'),
-    ]
-    dia = models.CharField(max_length=9, choices=opcionDias)
-    hora = models.TimeField()
+    dia = models.CharField(max_length=9)
+    horaInicio = models.CharField(max_length=6)
+    horaFin = models.CharField(max_length=6)
+    def __str__(self):
+        return self.dia
 #endregion utiles
 
 
@@ -45,3 +40,6 @@ class Curso(models.Model):
     fechaInicio = models.DateField()
     fechaFin = models.DateField()
     diasHorarios = models.ManyToManyField(diaHora)
+
+    def __str__(self):
+        return self.nombre

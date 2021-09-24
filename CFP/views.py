@@ -1,9 +1,9 @@
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from CFP.forms import frmCentroFormacion, frmLocalidad
+from CFP.forms import frmCentroFormacion, frmCursos, frmLocalidad
 from django.contrib import messages
-from .models import CentroDeFormacion, Localidad
+from .models import CentroDeFormacion, Curso, Localidad
 # Create your views here.
 
 
@@ -93,7 +93,7 @@ def localidadBorrar(request, idLocalidad):
 @login_required
 def centros(request):
     ctxt = {
-        'centrosForm' : CentroDeFormacion.objects.all(),
+        'centros' : CentroDeFormacion.objects.all(),
         'titulo':'Centros De Formacion'
     }
     return render(request, 'CFP/centros.html', ctxt)
@@ -169,3 +169,59 @@ def centroBorrar(request, idCentro):
 
 
 
+#region Cursos
+@login_required
+def cursoNuevo(request):
+    if request.user.is_superuser:
+        
+        formCurso = frmCursos
+        ctxt = {
+            'form': formCurso,
+            'titulo': 'Nuevo Curso'
+        }
+
+        if request.method == 'POST':
+            formPost = frmCursos(request.POST)
+
+            if formPost.is_valid():
+                #formPost.save()
+                
+                dias = request.POST.getlist('dias')
+                fIni = request.POST.getlist('horaInicio')
+                fFin = request.POST.getlist('horaFin')
+                #return HttpResponse('Dias: '+str(dias)+'\n'+'Hora Inicio: '+str(fIni)+'\n'+'Hora Fin: '+str(fFin))
+                
+                cursoNuevo = Curso()
+                cursoNuevo.nombre = request.POST.get('nombre')
+                cursoNuevo.cenForm = CentroDeFormacion.objects.get(pk=request.POST.get('cenForm'))
+                cursoNuevo.cantHoras = request.POST.get('cantHoras')
+                cursoNuevo.fechaInicio = request.POST.get('fechaInicio')
+                cursoNuevo.fechaFin = request.POST.get('fechaFin')
+                cursoNuevo.save()
+                for i in range(len(dias)):
+                    nuevoDiaHora = cursoNuevo.diasHorarios.create(dia=dias[i], horaInicio=fIni[i], horaFin=fFin[i])
+                
+                return redirect('/cursos')
+            else:
+                for mensaje in formPost.errors:
+                    messages.error(request, formPost.errors[mensaje])
+                    return render(request, 'CFP/cursosForm.html', {'form': formPost, 'titulo': 'Nuevo Curso'})
+        
+        else:
+            return render(request, 'CFP/cursosForm.html', ctxt)
+
+    else:
+        return HttpResponse('Solo disponible para usuario Administrador')
+
+
+
+@login_required
+def cursoLista(request):
+    ctxt = {
+        'cursos' : Curso.objects.all()
+    }
+
+    return render(request, 'CFP/cursos.html', ctxt)
+
+
+#endregion Cursos

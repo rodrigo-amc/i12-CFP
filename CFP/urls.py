@@ -15,4 +15,8 @@ urlpatterns = [
     path('centrosEditar/<int:idCentro>', views.centroEditar, name='centrosEditar'),
     path('centrosBorrar/<int:idCentro>', views.centroBorrar, name='centrosBorrar'),
 
+    #Cursos
+    path('cursoNuevo', views.cursoNuevo, name='cursoNuevo'),
+    path('cursos', views.cursoLista, name='cursos'),
+
 ]

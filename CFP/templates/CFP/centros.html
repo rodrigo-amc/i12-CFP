@@ -2,7 +2,7 @@
 
 {% block Contenido %}
     
-    {% for centro in centrosForm %}
+    {% for centro in centros %}
         <p>
             {{centro}}
             <a href="{% url 'centrosEditar' centro.id %}" class="btn btn-warning">Editar</a>

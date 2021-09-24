@@ -1,0 +1,112 @@
+{% extends 'Usuarios/menuAdmin.html' %}
+
+
+{% block Contenido %}
+
+    {% load crispy_forms_tags %}
+    
+    <form action="" method="post" autocomplete="off" class="m-4">
+        {% csrf_token %}
+        {{form | crispy}}
+
+        <p>
+            <input type="checkbox" class="dias" id="lunes" name="dias" value="Lunes">
+            <label for="dias">Lunes</label>
+            <input type="time" class="Lunes" name="horaInicio" id="" disabled>
+            <input type="time" class="Lunes" name="horaFin" id="" disabled>
+        </p>
+
+        <p>
+            <input type="checkbox" class="dias" id="" name="dias" value="Martes">
+            <label for="dias">Martes</label>
+            <input type="time" class="Martes" name="horaInicio" id="" disabled>
+            <input type="time" class="Martes" name="horaFin" id="" disabled>
+        </p>
+
+        <p>
+            <input type="checkbox" class="dias" id="" name="dias" value="Miercoles">
+            <label for="dias">Miercoles</label>
+            <input type="time" class="Miercoles" name="horaInicio" id="" disabled>
+            <input type="time" class="Miercoles" name="horaFin" id="" disabled>
+        </p>
+
+        <p>
+            <input type="checkbox" class="dias" id="" name="dias" value="Jueves">
+            <label for="dias">Jueves</label>
+            <input type="time" class="Jueves" name="horaInicio" id="" disabled>
+            <input type="time" class="Jueves" name="horaFin" id="" disabled>
+        </p>
+
+        <p>
+            <input type="checkbox" class="dias" id="" name="dias" value="Viernes">
+            <label for="dias">Viernes</label>
+            <input type="time" class="Viernes" name="horaInicio" id="" disabled>
+            <input type="time" class="Viernes" name="horaFin" id="" disabled>
+        </p>
+
+        <p>
+            <input type="checkbox" class="dias" id="" name="dias" value="Sabado">
+            <label for="dias">Sabado</label>
+            <input type="time" class="Sabado" name="horaInicio" id="" disabled>
+            <input type="time" class="Sabado" name="horaFin" id="" disabled>
+        </p>
+
+        <input type="submit" class="btn btn-success" value="Guardar">
+        <a href="{% url 'cursos' %}" class="btn btn-danger">Cancelar</a>
+    </form>
+
+    
+{% endblock Contenido %}
+
+
+{% block jquery %}
+    <script>
+
+        //Cuando cambia el estado de un checkbox
+        $('.dias').change(function(){
+            //pruebas
+            //alert('clicked')
+
+            //Creo una array con todos los inputs (checkbox) con nombre "dias"
+            var checks = $('input[name="dias"]')
+            //pruebas
+            //console.log(checks.length);
+
+            //Por cada elemento del array, cada checkbox
+            $(checks).each(function(){
+                //pruebas
+                //console.log(this.value)
+                //pruebas
+                //$('.habilitar').prop("disabled", false);
+                
+                //Guardo el valor del checkbox, que tambien es el nombre de la clase de los
+                //inputs de tipo "time" que le corresponde a cada checkbox
+                var claseTime = this.value
+                
+                //Si el checkbox es "tildado"
+                if ($(this).is(":checked")){
+                    //pruebas
+                    //alert("Clase: "+clase)
+
+                    //Le saco la propiedad "disaabled" a los "time" con esa clase
+                    $('.'+claseTime).prop("disabled", false);
+
+                }
+                //Si el checkbox no es "tildado"
+                else{
+                    //pruebas
+                    //alert('naditas')
+
+                    //Le agrego la propiedad "disabled" a los time con esa clase
+                    $('.'+claseTime).prop("disabled", true);
+                    
+                    //Borro el valor que tiene el input "time"
+                    $('.'+claseTime).val("")
+                    
+                }
+
+            })
+        })
+    </script>
+{% endblock jquery %}
+    

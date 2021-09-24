@@ -39,6 +39,16 @@
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown">
+                            Cursos
+                        </a>
+                        <div class="dropdown-menu bg-dark">
+                            <a class="dropdown-item text-white" href="{% url 'cursoNuevo' %}">Registrar Nuevo Curso</a>
+                            <a class="dropdown-item text-white" href="{% url 'cursos' %}">Listado De Cursos</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown">
                             Alumnos
                         </a>
                         <div class="dropdown-menu bg-dark">
@@ -59,30 +69,7 @@
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown">
-                            Cursos
-                        </a>
-                        <div class="dropdown-menu bg-dark">
-                            <a class="dropdown-item text-white" href="">Registrar Nuevo Curso</a>
-                            <a class="dropdown-item text-white" href="">Editar Datos De Cursos</a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown">
-                            Materias
-                        </a>
-                        <div class="dropdown-menu bg-dark">
-                            <a class="dropdown-item text-white" href="">Registrar Nueva Materia</a>
-                            <a class="dropdown-item text-white" href="">Editar Datos De Materia</a>
-                            <a class="dropdown-item text-white" href="#">Consultar Notas</a>
-                            <a class="dropdown-item text-white" href="#">Consultar Asistencias</a>
-                            <a class="dropdown-item text-white" href="#">Habilitar Inscripcion A Finales</a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown">
-                            Localidades
+                            Localidades - Sacar Esto
                         </a>
                         <div class="dropdown-menu bg-dark">
                             <a class="dropdown-item text-white" href="{% url 'localidadNueva' %}">Nueva Localidad</a>
