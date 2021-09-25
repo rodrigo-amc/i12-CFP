@@ -29,6 +29,7 @@ class frmCursos(ModelForm):
         fields = [
             'nombre',
             'cenForm',
+            'inscAbierta',
             'habilitado',
             'practico',
             'cantHoras',
@@ -39,6 +40,7 @@ class frmCursos(ModelForm):
         labels = {
             'nombre':'Nombre',
             'cenForm':'Centro De Formacion',
+            'inscAbierta': 'Inscripcion Abierta',
             'practico':'Curso Practico',
             'cantHoras':'Cantidad De Horas',
             'fechaInicio':'Fecha De Inicio',

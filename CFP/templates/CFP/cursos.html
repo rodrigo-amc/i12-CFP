@@ -5,7 +5,7 @@
     {% for curso in cursos %}
         <p>
             {{curso}}
-            <a href="" class="btn btn-warning">Editar</a>
+            <a href="{% url 'cursoEditar' curso.id %}" class="btn btn-warning">Editar</a>
             <a href="" class="btn btn-danger">Borrar</a>
         </p>
     {% endfor %}

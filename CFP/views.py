@@ -224,4 +224,52 @@ def cursoLista(request):
     return render(request, 'CFP/cursos.html', ctxt)
 
 
+@login_required
+def cursoEditar(request, idCurso):
+    curso = Curso.objects.get(pk=idCurso)
+    frEditar = frmCursos()
+
+    if request.method == 'GET':
+        frEditar = frmCursos(instance=curso)
+        
+        ctxGET = {
+            'form':frEditar,
+            'curso': curso,
+            'titulo':'Editar Curso'
+        }
+        return render(request, 'CFP/cursosFormEdit.html', ctxGET)
+    
+    #POST
+    else:
+        dias = request.POST.getlist('dias')
+        fIni = request.POST.getlist('horaInicio')
+        fFin = request.POST.getlist('horaFin')
+        frEditar = frmLocalidad(request.POST, instance=curso)
+        
+        if frEditar.is_valid():
+            if len(dias)!=0:
+                dhs = curso.diasHorarios.all()
+                for dh in dhs:
+                    dh.delete()
+                for i in range(len(dias)):
+                    nuevoDiaHora = curso.diasHorarios.create(dia=dias[i], horaInicio=fIni[i], horaFin=fFin[i])
+                frEditar.save()
+                #return HttpResponse(dhs)
+            else:
+                frEditar.save()
+
+            return redirect('/cursos')
+        
+        # Si el form no es valido
+        else:
+            ctxtPOST = {
+                'form': frEditar,
+                'titulo': 'Editar Curso - Corregir Errores'
+            }
+            for mensaje in frEditar.errors:
+                messages.error(request, frEditar.errors[mensaje])
+                return render(request, 'CFP/cursosFormEdit.html', ctxtPOST)
+        
+        return redirect('/cursos')
+
 #endregion Cursos
