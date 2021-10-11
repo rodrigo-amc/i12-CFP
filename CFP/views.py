@@ -8,7 +8,28 @@ from .models import CentroDeFormacion, Curso, Localidad
 
 
 def home(request):
-    return render(request, 'CFP/home.html')
+    #Todos Los Cursos
+    cursosAll = Curso.objects.all()
+    
+    #Todas las localidades de los cursos existentes
+    locs = []
+
+    #Guardo cada localidad asociada al CFP de cada Curso
+    #Solo una vez
+    for curso in cursosAll:
+        localidad = curso.cenForm.localidad
+        if localidad in locs:
+            continue
+        else:
+            locs.append(localidad)
+    
+    ctxtHome = {
+        'cursos' : cursosAll,
+        'localidades':locs
+    }
+    return render(request, 'CFP/home.html', ctxtHome)
+
+
 
 #region Localidades
 @login_required
@@ -217,10 +238,11 @@ def cursoNuevo(request):
 
 @login_required
 def cursoLista(request):
+    
     ctxt = {
         'cursos' : Curso.objects.all()
     }
-
+    
     return render(request, 'CFP/cursos.html', ctxt)
 
 

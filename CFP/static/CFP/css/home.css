@@ -1,0 +1,61 @@
+
+body{
+    /* background-image: linear-gradient(to bottom right, black,  #006600, #660000); */
+    background-color: #f0f0f0;
+}
+
+/* #txtBusqueda{
+    border-radius: 20px;
+    padding: 5px;
+    text-align: center;
+} */
+
+/* .card, .list-group-item{
+    background-color: #002b80;
+} */
+
+.titulos{
+    padding: 6rem 0;
+    color: black;
+}
+
+.cursos{
+    height: 100%;
+}
+
+.imgs{
+    background-size: cover;
+}
+
+.navbar{
+    opacity: 0.98;
+}
+
+/*UNIVERSAL PARALLAX*/
+.parallax__container {
+	clip: rect(0, auto, auto, 0);
+	height: 100%;
+	left: 0;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: -100;
+}
+
+.parallax {
+	position: fixed;
+	top: 0;
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+	-webkit-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	width: 100%;
+
+	/* BG behaviour */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+/*FIN UNIVERSAL PARALLAX*/

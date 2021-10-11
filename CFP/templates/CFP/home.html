@@ -4,11 +4,119 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centros De Formacion Profesional - Pcia Buenos Aires</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'CFP/css/bootstrap.min.css' %}">
-    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'CFP/css/home.css' %}">
+
 </head>
 <body>
-    <p class="text-center">Home</p>
+    <section class="container mt-4 mb-4">
+        <p>
+            <h3 class="text-center font-weight-bold">CENTROS DE FORMACION</h3>
+        </p>
+        <p>
+            <h4 class="text-center font-weight-bold">PROVINCIA DE BUENOS AIRES</h4>
+        </p>
+        
+    </section>
+    <header class="navbar navbar-expand-sm bg-dark text-white sticky-top mt-4">
+        <form action="">
+            <input class="form-control" type="text" name="" id="txtBusqueda" placeholder="Filtrar Por Localidad">
+        </form>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <button class="mr-2 btn btn-primary">Ingeresar</button>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-primary">Registrarse</button>
+          </li>
+        </ul>
+    </header>
+    {# Reemplazar comentarios html por los de template de Django#}
+    
+    {% comment %}
+        Comentario
+        Multi
+        Linea
+    {% endcomment %}
+        
+    
+    <div class="container-fluid">
+        {% for loc in localidades %}
+            <p><h3>{{loc}}</h3></p>
+            <div class="row mt-4">
+                {% for curso in cursos %}
+                    
+                    {% if curso.cenForm.localidad == loc %}
+                    <div class="col-sm-6 col-md-4 col-lg-3">
+                        <div class="card mb-3 shadow">
+                            <img class="card-img-top" src="{% static 'CFP/img/fondosCursos/imgPrueba.svg' %}" alt="Card image cap">
+                            <div class="card-body">
+
+                                <div class="card-img-overlay">
+                                    <h4 class="card-title font-weight-bold text-center">{{curso.nombre}}</h4>
+                                </div>
+                                
+                                <p class="card-text"> <b>Centro De Formacion:</b>
+                                    {{curso.cenForm}}
+                                </p>
+                                <p class="card-text"> <b>Localidad:</b>
+                                    {{curso.cenForm.localidad}}
+                                </p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                
+                                {% if curso.practico %}
+                                    <li class="list-group-item">Practico</li>
+                                {% else %}
+                                <li class="list-group-item">Teórico</li>
+                                {% endif %}
+                                    
+                                
+                                <li class="list-group-item">Duracion: {{curso.cantHoras}} horas</li>
+                                <li class="list-group-item">Inicia: {{curso.fechaInicio}} </li>
+                                <li class="list-group-item">Finaliza: {{curso.fechaFin}} </li>
+                            </ul>
+                            <div class="card-footer">
+                                
+                                
+                                {% if curso.inscAbierta %}
+                                    <p>Inscripcion Abierta</p>
+                                {% else %}
+                                    <p>Inscripcion Ahun No Disponible</p>
+                                {% endif %}
+                                    
+                                    
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                        
+                {% endfor %}<!--For Cursos-->
+                                
+            </div><!--FIN ROW LISTADO DE CURSOS-->
+            <hr>
+        {% endfor %}<!--For Localidades-->
+        
+            
+    </div><!--FIN CONTAINER PARA LISTADO DE CURSOS-->
+    
+
+
+    <!--JS jQuery, Popper, Bootstrap-->
+    <script src=" {% static 'CFP/js/jquery-3.6.0.min.js' %} "></script>
+    <script src=" {% static 'CFP/js/popper.min.js' %} "></script>
+    <script src=" {% static 'CFP/js/bootstrap.min.js' %} "></script>
+    <script src="{% static 'CFP/js/universal-parallax.min.js' %}"></script>
+
+    
+    {% block jquery %}
+        <script>
+            new universalParallax().init();
+        </script>        
+    {% endblock jquery %}
+        
 </body>
 </html>
+        
