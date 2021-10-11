@@ -4,12 +4,16 @@ from django.contrib.auth.decorators import login_required
 from CFP.forms import frmCentroFormacion, frmCursos, frmLocalidad
 from django.contrib import messages
 from .models import CentroDeFormacion, Curso, Localidad
+from django.db.models import Q
 # Create your views here.
 
 
 def home(request):
     #Todos Los Cursos
     cursosAll = Curso.objects.all()
+
+    #Valor del campo de busqueda 
+    busqueda = request.POST.get('localidad')
     
     #Todas las localidades de los cursos existentes
     locs = []
@@ -17,12 +21,27 @@ def home(request):
     #Guardo cada localidad asociada al CFP de cada Curso
     #Solo una vez
     for curso in cursosAll:
+        
         localidad = curso.cenForm.localidad
-        if localidad in locs:
-            continue
-        else:
+        
+        # Este es el "filtro" de busqueda. Si "busqueda" tiene un valor, hace la comparacion.
+        if busqueda and ( (busqueda in str(localidad)) or (busqueda in str(localidad).lower()) ):
+            # Si 
             locs.append(localidad)
-    
+            break
+        elif not busqueda:
+        # Si no hay valor de busqueda completa la lista con todas
+        # las localidades
+
+            # Si la localidad existe en la lista saltea la iteracion
+            if localidad in locs:
+                continue
+            else:
+                locs.append(localidad)
+
+    print("########################################")
+    print(locs)
+
     ctxtHome = {
         'cursos' : cursosAll,
         'localidades':locs

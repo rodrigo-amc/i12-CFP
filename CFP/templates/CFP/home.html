@@ -21,8 +21,14 @@
         
     </section>
     <header class="navbar navbar-expand-sm bg-dark text-white sticky-top mt-4">
-        <form action="">
-            <input class="form-control" type="text" name="" id="txtBusqueda" placeholder="Filtrar Por Localidad">
+        <form action="" method="POST" autocomplete="off">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Localidad" name="localidad" value="{{request.POST.localidad}}" >
+                <div class="input-group-append">
+                  <button id="buscar" class="btn btn-primary" type="submit">Buscar</button>
+                </div>
+            </div>
         </form>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
