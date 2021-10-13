@@ -39,10 +39,22 @@ class Alumno(models.Model):
 
     localidad = models.ForeignKey(Localidad, on_delete=DO_NOTHING)
 
-    curso = models.ForeignKey(Curso, on_delete=models.DO_NOTHING)
+    curso = models.ManyToManyField(Curso, through='CursoAlumno')
 
     def __str__(self):
         return self.usr_alumno.username
+
+
+# Este modelo deberia estar en la aplicacion CFP, pero lo pongo acá
+# porque sino el framework me devuelve error E331
+class CursoAlumno(models.Model):
+    alumno = models.ForeignKey(Alumno, on_delete=DO_NOTHING)
+    curso = models.ForeignKey(Curso, on_delete=DO_NOTHING)
+    #porcAsist = models.PositiveIntegerField(validators=[MaxValueValidator(100)])
+    porcAsist = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(100)])
+    notaCurso = models.PositiveIntegerField(validators=[MaxValueValidator(10)])
+    aprobado = models.BooleanField(default=False)
+
 
 
 

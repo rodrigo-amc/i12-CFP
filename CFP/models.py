@@ -2,7 +2,8 @@ from django.db import models
 from django.db.models.base import Model
 from django.db.models.deletion import DO_NOTHING
 from django.db.models.fields import CharField
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
+
 # Create your models here.
 
 # region Utiles
@@ -43,3 +44,5 @@ class Curso(models.Model):
 
     def __str__(self):
         return self.nombre
+
+
