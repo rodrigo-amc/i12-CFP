@@ -138,8 +138,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-# url que muestra en la barra
-MEDIA_URL = '/media/'
+# Url publica para archivos de tipo "media"
+MEDIA_URL = '/zMedia/'
 
 # Ruta de la carpeta "zMedia"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'zMedia')

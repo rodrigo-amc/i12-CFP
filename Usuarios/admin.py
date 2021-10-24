@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
-#from .models import appUser, Alumno, Profesor
+from .models import appUser, Alumno
 
 
 #admin.site.register(appUser)
@@ -10,7 +10,7 @@ from django.contrib.auth.admin import UserAdmin
 #Con el decorador "@admin.register" le indico con que modelo tiene que trabajar.
 #Para que se encripte la contraseña hay que heredar de UserAdmin, pero esto hace que
 #no se muestren todos los campos, por eso tengo que usar el fieldset.
-""" @admin.register(appUser)
+@admin.register(appUser)
 class usuarioAdmin(UserAdmin):
     list_display = ('username','first_name', 'last_name', )
     
@@ -48,5 +48,3 @@ class usuarioAdmin(UserAdmin):
 class alumnoAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Profesor)
- """

@@ -16,10 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# Importo el archivo settings para poder trabajar con los
+# valores asignados a "MEDIA_URL" y "MEDIA_ROOT"
+from django.conf import settings
+
+# Importo los archivos estaticos
+# Esto me permite agregar a "urlpatterns"
+# la ruta a las imagenes
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('CFP.urls')),
     path('', include("Usuarios.urls")),
     path('accounts/', include('django.contrib.auth.urls')),
     
-]
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

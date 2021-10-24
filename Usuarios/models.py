@@ -30,7 +30,7 @@ class Alumno(models.Model):
 
     # "upload_to" especifica la subcarpeta dentro de "zMedia" en donde se van a subir las imagenes
     DniImg = models.ImageField(upload_to='alumnos')
-    Autorizacion = models.ImageField(upload_to='alumnos')
+    Autorizacion = models.ImageField(blank=True, null=True, upload_to='alumnos/')
 
     Telefono = models.CharField(max_length=20)
     #email= es el campo "email" de AbstractUser
@@ -43,6 +43,7 @@ class Alumno(models.Model):
 
     def __str__(self):
         return self.usr_alumno.username
+
 
 
 # Este modelo deberia estar en la aplicacion CFP, pero lo pongo acá
