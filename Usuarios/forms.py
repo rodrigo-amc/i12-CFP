@@ -1,7 +1,7 @@
 from django import forms
-#from django.forms import ModelForm
-
+from django.core.exceptions import ValidationError
 from .models import appUser, Alumno
+from datetime import date
 
 #Widgets
 class widgetFecha(forms.DateInput):
@@ -34,7 +34,7 @@ class frmAlumno(forms.ModelForm):
         }
 
 
-
+    
 class frmUsuario(forms.ModelForm):
     class Meta:
         model = appUser
@@ -55,3 +55,19 @@ class frmUsuario(forms.ModelForm):
         widgets = {
             'password' : forms.PasswordInput()
         }
+
+
+
+    def clean_first_name(self):
+        nombre = self.cleaned_data.get('first_name')
+        if len(nombre)<=3:
+            raise forms.ValidationError('Por favor ingresa un nombre con al menos 3 letras')
+        else:
+            return nombre
+
+    def clean_last_name(self):
+        apellido = self.cleaned_data.get('last_name')
+        if len(apellido)<=3:
+            raise forms.ValidationError('Por favor ingresa un apellido con al menos 3 letras')
+        else:
+            return apellido

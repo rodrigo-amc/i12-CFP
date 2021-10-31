@@ -16,11 +16,11 @@
     <div class="container">
         <h2 class="mt-4 text-center mb-4">{{titulo}}</h2>
 
-        <form method="POST" enctype="multipart/form-data" autocomplete="off">
+        <form id="crearAlumno" method="POST" enctype="multipart/form-data" autocomplete="off">
             {% csrf_token %}
             {{formUser | crispy}}
             {{formAlumno | crispy}}
-            <button type="submit" class="btn btn-primary">Aceptar</button>
+            <button type="submit" id="btnSumbit" class="btn btn-primary">Aceptar</button>
             <button type="reset" class="btn btn-danger">Cancelar</button>
         </form>
     </div>
@@ -30,5 +30,78 @@
     <script src=" {% static 'CFP/js/jquery-3.6.0.min.js' %} "></script>
     <script src=" {% static 'CFP/js/popper.min.js' %} "></script>
     <script src=" {% static 'CFP/js/bootstrap.min.js' %} "></script>
+
+    <script>
+        /*
+        De milisegundo a dia
+        1000 ms = 1 s
+        60 s = 1 m
+        60 m = 1 h
+        24 h = 1 d
+        (1000*60*60*24) = 1d
+        */
+
+        //Funcion para validar la fecha de nacimiento
+        // Minimo 16 eños
+        // Si menor de 18 pedir autorización
+        function validarFecha(){
+            //Tomo el valor del campo fecha_nacimiento
+            var valFecha = $('#id_fecha_nacimiento').val();
+            
+            //Concateno a "valFecha" hh:mm:ss para poder convertir a Date()
+            var valFechaCompleto = valFecha+"T00:00:00";
+
+            //Convierto "valFechaCompleto" a tipo Date()
+            var fechaInputDate = new Date(valFechaCompleto);
+            
+            //Fecha Actual
+            var fechaActual = new Date();
+            
+            var diferenciaMs = fechaActual.getTime()-fechaInputDate.getTime()
+            
+            var calcDia = 1000*60*60*24
+
+            //Esta es la diferencia en dias entre la fecha actual y la 
+            //ingresada en el input
+            var diferenciaDIAS = Math.round(diferenciaMs/calcDia)
+
+            //console.log("Diferencia En Dias: "+diferenciaDIAS);
+
+            autorizacion = $('#id_Autorizacion').val()
+
+            // Si la fecha ingresada es mayor a la fecha actual
+            if (fechaInputDate>fechaActual){
+                alert("La 'Fecha De Nacimiento' no puede ser superior a la fecha actual")
+                $('#id_fecha_nacimiento').addClass('bg-warning')
+            
+            // Si la fecha ingresada es menor a 16 años respecto de la fecha actual
+            }else if (diferenciaDIAS < 5840){
+                alert('No se permite inscripcion a menores de 16 años')
+                $('#id_fecha_nacimiento').addClass('bg-warning')
+            
+            // Si la fecha ingresada es menor a 18 años respecto de
+            // la fecha actual, mayor a 16 y no adjunta autorizacion
+            }else if (diferenciaDIAS<6570 && diferenciaDIAS>=5840 && autorizacion==='' ){
+                
+                alert('Si sos menor de 18 años por favor adjunta una autorizacion de tus padres para inscribirte')
+                $('#id_Autorizacion').addClass('bg-warning')
+                $('#id_Autorizacion').focus()
+            }else{
+                //Si no ocurre ninguna de las condiciones anteriores
+                //se envía el formulario
+                $('#crearAlumno').submit()
+            }
+
+        };
+
+        $('#btnSumbit').click(function(){
+            //Evito que el boton del form haga el envío
+            event.preventDefault();
+
+            //Llamo a la función para validar la fecha de nacimiento
+            validarFecha();
+        })
+
+    </script>
 </body>
 </html>

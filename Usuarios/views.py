@@ -110,7 +110,7 @@ def crearAlumno(request):
             usuario.set_password(pswd)
             usuario.username = mail
             usuario.es_alumno = True
-            usuario.save()
+            #usuario.save()
             
 
             #Instancio Alumno
@@ -124,13 +124,16 @@ def crearAlumno(request):
                 Domicilio = domc,
                 localidad = Localidad.objects.get(pk=loc)
             )
-            alumno.save()
+            #alumno.save()
             
-            return HttpResponse(dni_img.name)
+            return HttpResponse("Alumno Guardado")
 
         else:
             for mensaje in usrPost.errors:
                 messages.error(request, usrPost.errors[mensaje])
+                return render(request, 'Usuarios/formAlumno.html', {'formAlumno': aluPost, 'formUser': usrPost, 'titulo':'errores'})
+            for mensaje in aluPost.errors:
+                messages.error(request, aluPost.errors[mensaje])
                 return render(request, 'Usuarios/formAlumno.html', {'formAlumno': aluPost, 'formUser': usrPost, 'titulo':'errores'})
 
     else:

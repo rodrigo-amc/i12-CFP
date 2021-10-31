@@ -1,0 +1,15 @@
+
+-edad (16 años en adelante)
+-adjuntar autorizacion (si tiene 16 o 17 años)
+
+
+python puro
+esto devuelve la diferencia en DÍAS
+
+>>> from datetime import date
+#año, mes, día
+>>> fnac = date(1979, 12, 11)
+>>> hoy = date.today()
+
+>>> hoy-fnac
+datetime.timedelta(15293)
