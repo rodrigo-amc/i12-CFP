@@ -60,14 +60,14 @@ class frmUsuario(forms.ModelForm):
 
     def clean_first_name(self):
         nombre = self.cleaned_data.get('first_name')
-        if len(nombre)<=3:
+        if len(nombre)<3:
             raise forms.ValidationError('Por favor ingresa un nombre con al menos 3 letras')
         else:
             return nombre
 
     def clean_last_name(self):
         apellido = self.cleaned_data.get('last_name')
-        if len(apellido)<=3:
+        if len(apellido)<3:
             raise forms.ValidationError('Por favor ingresa un apellido con al menos 3 letras')
         else:
             return apellido

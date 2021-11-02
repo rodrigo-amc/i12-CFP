@@ -81,7 +81,7 @@ def crearAlumno(request):
             dni = request.POST.get('Dni')
             fNac = request.POST.get('fecha_nacimiento')
             
-            # Acá también uso "request.FILES" para obtener el
+            # Acá uso "request.FILES" para obtener el
             # valor del input que contiene un archivo
             dni_img = request.FILES.get('DniImg')
             
@@ -110,7 +110,7 @@ def crearAlumno(request):
             usuario.set_password(pswd)
             usuario.username = mail
             usuario.es_alumno = True
-            #usuario.save()
+            usuario.save()
             
 
             #Instancio Alumno
@@ -124,17 +124,28 @@ def crearAlumno(request):
                 Domicilio = domc,
                 localidad = Localidad.objects.get(pk=loc)
             )
-            #alumno.save()
+            alumno.save()
             
-            return HttpResponse("Alumno Guardado")
+            return redirect('login')
 
         else:
             for mensaje in usrPost.errors:
                 messages.error(request, usrPost.errors[mensaje])
-                return render(request, 'Usuarios/formAlumno.html', {'formAlumno': aluPost, 'formUser': usrPost, 'titulo':'errores'})
+                return render(request, 'Usuarios/formAlumno.html',
+                {
+                    'formAlumno': aluPost,
+                    'formUser': usrPost,
+                    'titulo':'Registrarse Como Alumno'
+                })
+
             for mensaje in aluPost.errors:
                 messages.error(request, aluPost.errors[mensaje])
-                return render(request, 'Usuarios/formAlumno.html', {'formAlumno': aluPost, 'formUser': usrPost, 'titulo':'errores'})
+                return render(request, 'Usuarios/formAlumno.html',
+                {
+                    'formAlumno': aluPost,
+                    'formUser': usrPost,
+                    'titulo':'Registrarse Como Alumno'
+                })
 
     else:
         return render(request, 'Usuarios/formAlumno.html', ctxtGET)

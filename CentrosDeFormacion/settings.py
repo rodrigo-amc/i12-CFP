@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'Usuarios.appUser'
 
 #Indica a donde se dirige cuando hace login y logout
-LOGIN_REDIRECT_URL = '/home'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 # Application definition
