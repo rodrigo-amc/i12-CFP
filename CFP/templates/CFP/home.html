@@ -13,58 +13,91 @@
 <body>
     <section class="container mt-4 mb-4">
         <p>
-            <h3 class="text-center font-weight-bold">CENTROS DE FORMACION</h3>
+            <h3 class="text-center font-weight-bold">CENTROS DE FORMACION PROFESIONAL</h3>
         </p>
         <p>
             <h4 class="text-center font-weight-bold">PROVINCIA DE BUENOS AIRES</h4>
         </p>
         
     </section>
+
     <header class="navbar navbar-expand-sm bg-dark text-white sticky-top mt-4">
+        {# Form para buscador por localidades #}
         <form action="" method="POST" autocomplete="off">
             {% csrf_token %}
             <div class="input-group mb-3">
                 <input type="text" class="form-control" placeholder="Localidad" name="localidad" value="{{request.POST.localidad}}" >
                 <div class="input-group-append">
-                  <button id="buscar" class="btn btn-primary" type="submit">Buscar</button>
+                  <button id="buscar" class="btn btn-outline-primary" type="submit">Buscar</button>
                 </div>
             </div>
         </form>
+
+        {# Opciones Barra Navegacion Usuario#}
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <button class="mr-2 btn btn-primary">Ingeresar</button>
-          </li>
-          <li class="nav-item">
-            <!-- <button class="btn btn-primary">Registrarse</button> -->
-            <a href="{% url 'crearAlumno' %}" class="btn btn-primary">Registrarse</a>
-          </li>
+            
+            {% if usuario.is_authenticated %}
+                
+                {% if usuario.is_superuser %}
+                    <li class="nav-item">
+                        <span class="mr-3">Administrador: {{usuario.username}}</span>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href=" {% url 'menu' %} " class="btn btn-outline-primary btn-sm mr-3">Menu Administracion</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href=" {%url 'logout'%} " class="btn btn-outline-primary btn-sm">Cerrar Cesion</a>
+                    </li>
+                {% elif usuario.es_alumno %}
+                    <li class="nav-item"><span class="mr-3 font-weight-bold">{{usuario.first_name}} {{usuario.last_name}}</span></li>
+
+                    <li class="nav-item">
+                        <a href="" class="btn btn-outline-primary btn-sm mr-3">Menu De Alumno</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href=" {%url 'logout'%} " class="btn btn-outline-primary btn-sm">Cerrar Cesion</a>
+                    </li>
+                {% else %}
+                    Es Profesor
+                {% endif %}
+                    
+                
+            {% else %}
+                <li class="nav-item mr-3">
+                    {#<button class="mr-2 btn btn-primary">Ingeresar</button>#}
+                    <a href=" {%url 'login'%} " class="btn btn-primary">Ingresar</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'crearAlumno' %}" class="btn btn-primary">Registrarse</a>
+                </li>
+            {% endif %}
         </ul>
     </header>
-    {# Reemplazar comentarios html por los de template de Django#}
+           
     
-    {% comment %}
-        Comentario
-        Multi
-        Linea
-    {% endcomment %}
-        
-    
+
     <div class="container-fluid">
         {% for loc in localidades %}
             <p><h3>{{loc}}</h3></p>
+            
             <div class="row mt-4">
                 {% for curso in cursos %}
                     
                     {% if curso.cenForm.localidad == loc %}
                     <div class="col-sm-6 col-md-4 col-lg-3">
-                        <div class="card mb-3 shadow">
-                            <img class="card-img-top" src="{% static 'CFP/img/fondosCursos/imgPrueba.svg' %}" alt="Card image cap">
-                            <div class="card-body">
 
-                                <div class="card-img-overlay">
-                                    <h4 class="card-title font-weight-bold text-center">{{curso.nombre}}</h4>
+                        <div class="card mb-3 shadow">
+                            <div class="card-header">
+                                <div class="text-center font-weight-bold" style="height: 60px">
+                                    <span class="h3 font-weight-bold">{{curso.nombre | title}}</span>
                                 </div>
-                                
+                            </div>
+                            
+                            <div class="card-body">
                                 <p class="card-text"> <b>Centro De Formacion:</b>
                                     {{curso.cenForm}}
                                 </p>
@@ -89,9 +122,11 @@
                                 
                                 
                                 {% if curso.inscAbierta %}
-                                    <p>Inscripcion Abierta</p>
+                                    <p class="text-center">
+                                        <a href="" class="btn btn-success btn-block p-1">Inscribirse</a>
+                                    </p>
                                 {% else %}
-                                    <p>Inscripcion Ahun No Disponible</p>
+                                    <p class="text-center p-2">Proximamente</p>
                                 {% endif %}
                                     
                                     
@@ -100,18 +135,18 @@
                     </div>
                     {% endif %}
                         
-                {% endfor %}<!--For Cursos-->
+                {% endfor %} {#For Cursos#}
                                 
-            </div><!--FIN ROW LISTADO DE CURSOS-->
+            </div> {#FIN ROW LISTADO DE CURSOS#}
             <hr>
-        {% endfor %}<!--For Localidades-->
+        {% endfor %} {#For Localidades#}
         
             
-    </div><!--FIN CONTAINER PARA LISTADO DE CURSOS-->
+    </div> {# FIN CONTAINER PARA LISTADO DE CURSOS#}
     
 
 
-    <!--JS jQuery, Popper, Bootstrap-->
+    {#JS jQuery, Popper, Bootstrap#}
     <script src=" {% static 'CFP/js/jquery-3.6.0.min.js' %} "></script>
     <script src=" {% static 'CFP/js/popper.min.js' %} "></script>
     <script src=" {% static 'CFP/js/bootstrap.min.js' %} "></script>
@@ -127,3 +162,11 @@
 </body>
 </html>
         
+{# Reemplazar comentarios html por los de template de Django#}
+{# Estos comentarios no se renderizan ;) #}
+    
+{% comment %}
+    Comentario
+    Multi
+    Linea
+{% endcomment %}

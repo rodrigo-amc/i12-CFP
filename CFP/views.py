@@ -9,6 +9,11 @@ from django.db.models import Q
 
 
 def home(request):
+    
+    # Recibo el usuario logeuado
+    usr = request.user
+
+    #region Localidades
     #Todos Los Cursos
     cursosAll = Curso.objects.all()
 
@@ -38,13 +43,15 @@ def home(request):
                 continue
             else:
                 locs.append(localidad)
-
-    print("########################################")
-    print(locs)
-
+    
+    #print("########################################")
+    #print(locs)
+    #endregion Localidades
+    
     ctxtHome = {
         'cursos' : cursosAll,
-        'localidades':locs
+        'localidades':locs,
+        'usuario' : usr
     }
     return render(request, 'CFP/home.html', ctxtHome)
 
