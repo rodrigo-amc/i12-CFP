@@ -68,4 +68,7 @@ class Profesor(models.Model):
     #OJO edité "AbstractUser" (/django/contrib/auth/models.py) para que el campo email sea único
 
     def __str__(self):
-        return self.usr_profesor.username
+        name = self.usr_profesor.first_name
+        lname = self.usr_profesor.last_name
+        fname = str(name+' '+lname)
+        return fname

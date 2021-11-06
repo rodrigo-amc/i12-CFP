@@ -3,6 +3,8 @@ from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from CFP.forms import frmCentroFormacion, frmCursos, frmLocalidad
 from django.contrib import messages
+
+from Usuarios.models import Profesor
 from .models import CentroDeFormacion, Curso, Localidad
 from django.db.models import Q
 # Create your views here.
@@ -244,6 +246,7 @@ def cursoNuevo(request):
                 cursoNuevo.cantHoras = request.POST.get('cantHoras')
                 cursoNuevo.fechaInicio = request.POST.get('fechaInicio')
                 cursoNuevo.fechaFin = request.POST.get('fechaFin')
+                cursoNuevo.profesor = Profesor.objects.get(pk=request.POST.get('profesor'))
                 cursoNuevo.save()
                 for i in range(len(dias)):
                     nuevoDiaHora = cursoNuevo.diasHorarios.create(dia=dias[i], horaInicio=fIni[i], horaFin=fFin[i])
@@ -295,6 +298,12 @@ def cursoEditar(request, idCurso):
         frEditar = frmLocalidad(request.POST, instance=curso)
         
         if frEditar.is_valid():
+            #Obtengo el Profesor seleccionado en el form
+            profe = Profesor.objects.get(pk=request.POST.get('profesor'))
+            
+            #Asigno al curso el profesor filtrado por id
+            curso.profesor = profe
+
             if len(dias)!=0:
                 dhs = curso.diasHorarios.all()
                 for dh in dhs:
