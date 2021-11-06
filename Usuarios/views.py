@@ -2,8 +2,8 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 
-from Usuarios.forms import frmAlumno, frmUsuario
-from .models import Alumno, appUser
+from Usuarios.forms import frmAlumno, frmUsuario, frmProfesor, frmUsrProf
+from .models import Alumno, Profesor, appUser
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from CFP.models import Localidad
@@ -150,3 +150,85 @@ def crearAlumno(request):
     else:
         return render(request, 'Usuarios/formAlumno.html', ctxtGET)
 #endregion
+
+
+
+@login_required
+def lstProfesores(request):
+    if request.user.is_superuser:
+        profesores = Profesor.objects.all()
+        ctx={
+            'profesores': profesores,
+            'titulo': 'Profesores'
+        }
+        return render(request, 'Usuarios/profesores.html', ctx)
+    else:
+        return redirect('login')
+
+
+
+@login_required
+def crearProfesor(request):
+    if request.user.is_superuser:
+        getDict={
+            'titulo': 'Registrar Nuevo Profesor',
+            'frmUsuario': frmUsrProf(),
+            'formProfesor': frmProfesor()
+        }
+        if request.method == 'POST':
+            frmPostU = frmUsrProf(request.POST)
+            frmPostP = frmProfesor(request.POST)
+            if frmPostP.is_valid() and frmPostU.is_valid():
+                nombre = request.POST.get('first_name')
+                apellido = request.POST.get('last_name')
+                mail = request.POST.get('email')
+                pswd = str(nombre).lower()+str(apellido).lower()
+                tel = request.POST.get('telefono')
+
+                usuario = appUser(
+                    first_name = nombre,
+                    last_name = apellido,
+                    email = mail,
+                    password = pswd
+                )
+                usuario.set_password(pswd)
+                usuario.username = mail
+                usuario.es_profesor = True
+                usuario.save()
+
+                profe = Profesor(
+                    usr_profesor = usuario,
+                    telefono = tel
+
+                )
+                profe.save()
+
+                return HttpResponse(
+                    'nombre: {0}</br>Apellido: {1}</br>Email: {2}</br>Password: {3}</br>Telefono: {4}'
+                    .format(nombre, apellido, mail, pswd, tel)
+                    )
+
+            else:
+                for mensaje in frmPostU.errors:
+                    messages.error(request, frmPostU.errors[mensaje])
+                    return render(request, 'Usuarios/formProfesor.html',
+                    {
+                        'formProfesor': frmPostP,
+                        'frmUsuario': frmPostU,
+                        'titulo':'Registrar Nuevo Profesor'
+                    })
+
+                for mensaje in frmPostP.errors:
+                    messages.error(request, frmPostP.errors[mensaje])
+                    return render(request, 'Usuarios/formProfesor.html',
+                    {
+                        'formProfesor': frmPostP,
+                        'frmUsuario': frmPostU,
+                        'titulo':'Registrar Nuevo Profesor'
+                    })
+        
+        else:
+            return render(request, 'Usuarios/formProfesor.html', getDict)
+        
+    else:
+        return redirect('home')

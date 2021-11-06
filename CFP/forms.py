@@ -1,8 +1,7 @@
 from django import forms
-from django.db import models
-from django.db.models import fields
-from django.forms import ModelForm, widgets
-from .models import Curso, Localidad, CentroDeFormacion, diaHora
+from django.forms import ModelForm
+
+from .models import Curso, Localidad, CentroDeFormacion
 
 class frmLocalidad(ModelForm):
     class Meta:
@@ -29,6 +28,7 @@ class frmCursos(ModelForm):
         fields = [
             'nombre',
             'cenForm',
+            'profesor',
             'inscAbierta',
             'habilitado',
             'practico',

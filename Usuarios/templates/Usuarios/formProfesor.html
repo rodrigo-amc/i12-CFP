@@ -1,0 +1,21 @@
+{% extends 'Usuarios/menuAdmin.html' %}
+
+{% block Contenido %}
+
+    {% load crispy_forms_tags %}
+    
+    <div class="container">
+
+        <form method="POST" autocomplete="off">
+            {% csrf_token %}
+            
+            {{frmUsuario | crispy}}
+            {{formProfesor | crispy}}
+            
+            <button type="submit" class="btn btn-success">Aceptar</button>
+            <a href="{% url 'profesores' %}" class="btn btn-danger">Cancelar</a>
+        </form>
+
+    </div>
+
+{% endblock Contenido %}

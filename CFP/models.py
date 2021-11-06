@@ -1,8 +1,8 @@
 from django.db import models
-from django.db.models.base import Model
 from django.db.models.deletion import DO_NOTHING
 from django.db.models.fields import CharField
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MinValueValidator
+
 
 # Create your models here.
 
@@ -41,6 +41,17 @@ class Curso(models.Model):
     fechaInicio = models.DateField()
     fechaFin = models.DateField()
     diasHorarios = models.ManyToManyField(diaHora)
+    
+    #region Evitar Error De Referencia Circular
+    # https://stackoverflow.com/questions/28868610/django-importerror-cannot-import-model#28869260
+    # No me deja importar el modelo "Profesor" de la app "Usuarios" porque me devuelve
+    # un error relacionado con referencia circular, aunque no hay ninguna referencia
+    # circular...
+    # La solucion (stackoverflow) es definir el parámetro que corresponde al modelo en la relacion
+    # como un string con la forma "App.Modelo" y de ese modo se evita el import que genera
+    # el error.
+    # endregion 
+    profesor = models.ForeignKey('Usuarios.Profesor', null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.nombre

@@ -7,7 +7,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.logIn, name='login'),
     path('menu', views.menu, name='menu'),
-    path('crearAlumno', views.crearAlumno, name='crearAlumno')
+    path('crearAlumno', views.crearAlumno, name='crearAlumno'),
+    path('profesores', views.lstProfesores, name='profesores'),
+    path('crearProfesor', views.crearProfesor, name='crearProfesor')
 ]
 
 # Ruta para las imagenes

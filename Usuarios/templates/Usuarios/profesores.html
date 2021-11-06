@@ -1,0 +1,13 @@
+{% extends 'Usuarios/menuAdmin.html' %}
+
+{% block Contenido %}
+    <a href="{% url 'crearProfesor' %}" class="btn btn-primary mb-4">Nuevo Profesor</a>
+    {% for profe in profesores %}
+        <p class='mt-4'>
+            {{profe}}
+            <a href="{#% url 'centrosEditar' profe.id %#}" class="btn btn-warning">Editar</a>
+            <a href="{#% url 'centrosBorrar' profe.id %#}" class="btn btn-danger">Borrar</a>
+        </p>
+    {% endfor %}
+        
+{% endblock Contenido %}
