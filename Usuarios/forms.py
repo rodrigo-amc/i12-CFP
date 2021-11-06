@@ -86,12 +86,14 @@ class frmUsrProf(forms.ModelForm):
             'first_name',
             'last_name',
             'email',
+            'is_active'
         ]
 
         labels = {
             'first_name' : 'Nombre',
             'last_name' : 'Apellido',
-            'email' : 'Correo Electronico'
+            'email' : 'Correo Electronico',
+            'is_active': 'Activo En Sistema'
         }
 
     def clean_first_name(self):

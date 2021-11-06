@@ -156,7 +156,7 @@ def crearAlumno(request):
 @login_required
 def lstProfesores(request):
     if request.user.is_superuser:
-        profesores = Profesor.objects.all()
+        profesores = appUser.objects.all().filter(es_profesor=True)
         ctx={
             'profesores': profesores,
             'titulo': 'Profesores'
@@ -232,3 +232,67 @@ def crearProfesor(request):
         
     else:
         return redirect('home')
+
+
+
+@login_required
+def editarProfesor(request, idUsr):
+    if request.user.is_superuser:
+        usr = appUser.objects.get(pk=idUsr)
+        profe = Profesor.objects.get(pk=idUsr)
+
+        if request.method == 'GET':
+            frmUsr = frmUsrProf(instance=usr)
+            frmPro = frmProfesor(instance=profe)
+
+            ctxGet = {
+                'titulo': 'Editar Datos De Profesor',
+                'frmUsuario': frmUsr,
+                'formProfesor': frmPro
+            }
+
+            return render(request, 'Usuarios/formProfesor.html', ctxGet)
+        
+        elif request.method == 'POST':
+            usrPost = frmUsrProf(request.POST, instance=usr)
+            proPost = frmProfesor(request.POST, instance=profe)
+
+            if usrPost.is_valid() and proPost.is_valid:
+                usrPost.save()
+                proPost.save()
+                return redirect('profesores')
+            else:
+                for mensaje in usrPost.errors:
+                    messages.error(request, usrPost.errors[mensaje])
+                    return render(request, 'Usuarios/formProfesor.html',
+                    {
+                        'formProfesor': proPost,
+                        'frmUsuario': usrPost,
+                        'titulo':'Editar Datos De Profesor'
+                    })
+
+                for mensaje in proPost.errors:
+                    messages.error(request, proPost.errors[mensaje])
+                    return render(request, 'Usuarios/formProfesor.html',
+                    {
+                        'formProfesor': proPost,
+                        'frmUsuario': usrPost,
+                        'titulo':'Editar Datos De Profesor'
+                    })
+        
+        else:
+            return HttpResponse('naditas')    
+    else:
+        return HttpResponse('banana')
+
+
+
+@login_required
+def profDeshabilitar(request, idUsr):
+    usr = appUser.objects.get(pk = idUsr)
+    if request.user.is_superuser and usr.es_profesor:
+        usr.is_active = False
+        usr.save()
+        return redirect('profesores')
+    else:
+        return HttpResponse('naditas')

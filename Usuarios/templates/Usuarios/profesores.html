@@ -4,9 +4,19 @@
     <a href="{% url 'crearProfesor' %}" class="btn btn-primary mb-4">Nuevo Profesor</a>
     {% for profe in profesores %}
         <p class='mt-4'>
-            {{profe}}
-            <a href="{#% url 'centrosEditar' profe.id %#}" class="btn btn-warning">Editar</a>
-            <a href="{#% url 'centrosBorrar' profe.id %#}" class="btn btn-danger">Borrar</a>
+            <span>{{profe.first_name}}</span>
+            <span>{{profe.last_name}}</span>
+            <span class="ml-2">{{profe.email}}</span>
+
+            <a href="{% url 'editProf' profe.id %}" class="btn btn-warning ml-4">Editar</a>
+            
+            {% if profe.is_active %}
+                <a href="{% url 'deshabProf' profe.id %}" class="ml-2 btn btn-danger">Deshabilitar</a>
+            {% else %}
+                <a href="" class="ml-2 btn btn-danger disabled">Deshabilitado</a>
+            {% endif %}
+                
+            
         </p>
     {% endfor %}
         

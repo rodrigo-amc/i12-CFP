@@ -9,7 +9,9 @@ urlpatterns = [
     path('menu', views.menu, name='menu'),
     path('crearAlumno', views.crearAlumno, name='crearAlumno'),
     path('profesores', views.lstProfesores, name='profesores'),
-    path('crearProfesor', views.crearProfesor, name='crearProfesor')
+    path('crearProfesor', views.crearProfesor, name='crearProfesor'),
+    path('editProf/<int:idUsr>', views.editarProfesor, name='editProf'),
+    path('deshabProf/<int:idUsr>', views.profDeshabilitar, name='deshabProf')
 ]
 
 # Ruta para las imagenes
