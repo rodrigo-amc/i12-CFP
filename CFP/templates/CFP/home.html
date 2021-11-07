@@ -87,52 +87,54 @@
             <div class="row mt-4">
                 {% for curso in cursos %}
                     
-                    {% if curso.cenForm.localidad == loc %}
-                    <div class="col-sm-6 col-md-4 col-lg-3">
+                    {% if curso.habilitado %}
+                        {% if curso.cenForm.localidad == loc %}
+                        <div class="col-sm-6 col-md-4 col-lg-3">
 
-                        <div class="card mb-3 shadow">
-                            <div class="card-header">
-                                <div class="text-center font-weight-bold" style="height: 60px">
-                                    <span class="h3 font-weight-bold">{{curso.nombre | title}}</span>
+                            <div class="card mb-3 shadow">
+                                <div class="card-header">
+                                    <div class="text-center font-weight-bold" style="height: 60px">
+                                        <span class="h3 font-weight-bold">{{curso.nombre | title}}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-body">
+                                    <p class="card-text"> <b>Centro De Formacion:</b>
+                                        {{curso.cenForm}}
+                                    </p>
+                                    <p class="card-text"> <b>Localidad:</b>
+                                        {{curso.cenForm.localidad}}
+                                    </p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    
+                                    {% if curso.practico %}
+                                        <li class="list-group-item">Practico</li>
+                                    {% else %}
+                                    <li class="list-group-item">Teórico</li>
+                                    {% endif %}
+                                        
+                                    
+                                    <li class="list-group-item">Duracion: {{curso.cantHoras}} horas</li>
+                                    <li class="list-group-item">Inicia: {{curso.fechaInicio}} </li>
+                                    <li class="list-group-item">Finaliza: {{curso.fechaFin}} </li>
+                                </ul>
+                                <div class="card-footer">
+                                    
+                                    
+                                    {% if curso.inscAbierta %}
+                                        <p class="text-center">
+                                            <a href="" class="btn btn-success btn-block p-1">Inscribirse</a>
+                                        </p>
+                                    {% else %}
+                                        <p class="text-center p-2">Proximamente</p>
+                                    {% endif %}
+                                        
+                                        
                                 </div>
                             </div>
-                            
-                            <div class="card-body">
-                                <p class="card-text"> <b>Centro De Formacion:</b>
-                                    {{curso.cenForm}}
-                                </p>
-                                <p class="card-text"> <b>Localidad:</b>
-                                    {{curso.cenForm.localidad}}
-                                </p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                
-                                {% if curso.practico %}
-                                    <li class="list-group-item">Practico</li>
-                                {% else %}
-                                <li class="list-group-item">Teórico</li>
-                                {% endif %}
-                                    
-                                
-                                <li class="list-group-item">Duracion: {{curso.cantHoras}} horas</li>
-                                <li class="list-group-item">Inicia: {{curso.fechaInicio}} </li>
-                                <li class="list-group-item">Finaliza: {{curso.fechaFin}} </li>
-                            </ul>
-                            <div class="card-footer">
-                                
-                                
-                                {% if curso.inscAbierta %}
-                                    <p class="text-center">
-                                        <a href="" class="btn btn-success btn-block p-1">Inscribirse</a>
-                                    </p>
-                                {% else %}
-                                    <p class="text-center p-2">Proximamente</p>
-                                {% endif %}
-                                    
-                                    
-                            </div>
                         </div>
-                    </div>
+                        {% endif %}
                     {% endif %}
                         
                 {% endfor %} {#For Cursos#}

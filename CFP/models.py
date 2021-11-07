@@ -36,7 +36,7 @@ class Curso(models.Model):
     cenForm = models.ForeignKey(CentroDeFormacion, on_delete=DO_NOTHING)
     inscAbierta = models.BooleanField(default=False)
     habilitado = models.BooleanField(default=False)
-    practico = models.BooleanField(default=True)
+    practico = models.BooleanField(default=False)
     cantHoras = models.PositiveIntegerField(validators=[MinValueValidator(4)])
     fechaInicio = models.DateField()
     fechaFin = models.DateField()

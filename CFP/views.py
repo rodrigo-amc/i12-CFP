@@ -246,8 +246,29 @@ def cursoNuevo(request):
                 cursoNuevo.cantHoras = request.POST.get('cantHoras')
                 cursoNuevo.fechaInicio = request.POST.get('fechaInicio')
                 cursoNuevo.fechaFin = request.POST.get('fechaFin')
-                cursoNuevo.profesor = Profesor.objects.get(pk=request.POST.get('profesor'))
+                # Asigno Profesor
+                pid = request.POST.get('profesor')
+                if pid != '':
+                    cursoNuevo.profesor = Profesor.objects.get(pk=pid)
+                
+                #region Checkbox
+                # Compruebo el valor de los checboxes
+                # Si están seleccionados en el formulario llega por POST
+                # una variable con el nombre del campo. Sino, no llega
+                # la variable es porque no fue seleccionado, por eso
+                # solo compruebo que llegue la variable y no su valor
+                #endregion
+                if request.POST.get('inscAbierta'):
+                    cursoNuevo.inscAbierta = True
+                
+                if request.POST.get('habilitado'):
+                    cursoNuevo.habilitado = True
+
+                if request.POST.get('practico'):
+                    cursoNuevo.practico = True
+                
                 cursoNuevo.save()
+
                 for i in range(len(dias)):
                     nuevoDiaHora = cursoNuevo.diasHorarios.create(dia=dias[i], horaInicio=fIni[i], horaFin=fFin[i])
                 
@@ -299,11 +320,32 @@ def cursoEditar(request, idCurso):
         
         if frEditar.is_valid():
             #Obtengo el Profesor seleccionado en el form
-            profe = Profesor.objects.get(pk=request.POST.get('profesor'))
-            
-            #Asigno al curso el profesor filtrado por id
-            curso.profesor = profe
+            comboProfe = request.POST.get('profesor')
+            if comboProfe != '':            
+                #Asigno al curso el profesor filtrado por id
+                profe = Profesor.objects.get(pk=comboProfe)
+                curso.profesor = profe
+            else:
+                curso.profesor = None
 
+            #checkboxes
+            if request.POST.get('inscAbierta'):
+                curso.inscAbierta = True
+            else:
+                curso.inscAbierta = False
+
+            if request.POST.get('habilitado'):
+                curso.habilitado = True
+            else:
+                curso.habilitado = False
+
+            if request.POST.get('practico'):
+                curso.practico = True
+            else:
+                curso.practico = False
+            
+            
+            #Editar Dias y Horas
             if len(dias)!=0:
                 dhs = curso.diasHorarios.all()
                 for dh in dhs:
