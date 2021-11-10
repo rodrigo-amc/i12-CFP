@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from CFP.forms import frmCentroFormacion, frmCursos, frmLocalidad
 from django.contrib import messages
 
-from Usuarios.models import Profesor
+from Usuarios.models import Alumno, CursoAlumno, Profesor, appUser
 from .models import CentroDeFormacion, Curso, Localidad
 from django.db.models import Q
 # Create your views here.
@@ -15,7 +15,20 @@ def home(request):
     # Recibo el usuario logeuado
     usr = request.user
 
-    #region Localidades
+    def getIfAlumno():
+        '''Si el usuarui logueado es alumno
+        devuelve el objeto de alumno que
+        uso en el template para comprobar
+        si el alumno está asociado con
+        el curso'''
+        alufn = ''
+        if usr.is_authenticated and usr.es_alumno:
+            alufn = Alumno.objects.get(pk = usr.id)
+        return alufn
+
+    amno = getIfAlumno()
+
+    #region Localidades/Cursos
     #Todos Los Cursos
     cursosAll = Curso.objects.all()
 
@@ -49,11 +62,12 @@ def home(request):
     #print("########################################")
     #print(locs)
     #endregion Localidades
-    
+
     ctxtHome = {
         'cursos' : cursosAll,
         'localidades':locs,
-        'usuario' : usr
+        'usuario' : usr,
+        'alumno' : amno
     }
     return render(request, 'CFP/home.html', ctxtHome)
 
@@ -238,7 +252,6 @@ def cursoNuevo(request):
                 dias = request.POST.getlist('dias')
                 fIni = request.POST.getlist('horaInicio')
                 fFin = request.POST.getlist('horaFin')
-                #return HttpResponse('Dias: '+str(dias)+'\n'+'Hora Inicio: '+str(fIni)+'\n'+'Hora Fin: '+str(fFin))
                 
                 cursoNuevo = Curso()
                 cursoNuevo.nombre = request.POST.get('nombre')
@@ -370,5 +383,21 @@ def cursoEditar(request, idCurso):
                 return render(request, 'CFP/cursosFormEdit.html', ctxtPOST)
         
         return redirect('/cursos')
+
+
+@login_required
+def inscCurso(request, cId):
+    if request.user.es_alumno:
+        alu = Alumno.objects.get(pk=request.user.id)
+        cur = Curso.objects.get(pk=cId)
+        insc = CursoAlumno(
+            alumno = alu,
+            curso = cur
+        )
+        insc.save()
+        return redirect('home')
+    else:
+        return HttpResponse('no es alumno')
+
 
 #endregion Cursos

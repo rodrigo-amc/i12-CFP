@@ -52,8 +52,8 @@ class CursoAlumno(models.Model):
     alumno = models.ForeignKey(Alumno, on_delete=DO_NOTHING)
     curso = models.ForeignKey(Curso, on_delete=DO_NOTHING)
     #porcAsist = models.PositiveIntegerField(validators=[MaxValueValidator(100)])
-    porcAsist = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(100)])
-    notaCurso = models.PositiveIntegerField(validators=[MaxValueValidator(10)])
+    porcAsist = models.FloatField(blank=True, null=True, validators=[MinValueValidator(0), MaxValueValidator(100)])
+    notaCurso = models.PositiveIntegerField(blank=True, null=True, validators=[MaxValueValidator(10)])
     aprobado = models.BooleanField(default=False)
 
 
