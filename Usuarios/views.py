@@ -6,7 +6,7 @@ from Usuarios.forms import frmAlumno, frmUsuario, frmProfesor, frmUsrProf
 from .models import Alumno, Profesor, appUser
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from CFP.models import Localidad
+from CFP.models import Curso, Localidad
 
 # Create your views here.
 
@@ -20,33 +20,15 @@ def logIn(request):
 
 @login_required
 def menu(request):
-    """ contexto ={
-        'usuario' : appUser.is_superuser
-    } """
+    
     if request.user.is_superuser:
         adminCtxt={
             'titulo':'Menu Administracion'
         }
         return render(request, 'Usuarios/menuAdmin.html', adminCtxt)
-    
-    elif request.user.es_alumno:
-        alumno = Alumno.objects.get(pk=request.user.id)
-        #carrera = Carrera.objects.get(id=alumno.carrera_id)
-        #resolucion = carrera.resolucion
-        aluCtxt={
-            'titulo' : 'Menu Alumno',
-         #   'carrera':carrera,
-         #   'resolucion': resolucion,
-        }
-        return render(request, 'Usuarios/menuAlumno.html', aluCtxt)
-    
-    elif request.user.es_profesor:
-        proCtxt={
-            'titulo':'Menu Profesor'
-        }
-        return render(request, 'Usuarios/menuProfesor.html', proCtxt)
     else:
-        return HttpResponse('No tiene permiso para acceder')
+        return redirect('/')
+
 
 
 #region Alumno

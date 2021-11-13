@@ -23,16 +23,23 @@
 
     <header class="navbar navbar-expand-sm bg-dark text-white sticky-top mt-4">
         {# Form para buscador por localidades #}
-        <form action="" method="POST" autocomplete="off">
-            {% csrf_token %}
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Localidad" name="localidad" value="{{request.POST.localidad}}" >
-                <div class="input-group-append">
-                  <button id="buscar" class="btn btn-outline-primary" type="submit">Buscar</button>
+            
+            {% if miscursos %}
+                <a href="{% url 'home' %}" class="text-decoration-none text-white font-weight-bold">
+                    Volver a inicio
+                </a>
+            {% else %}
+            <form action="" method="POST" autocomplete="off">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Localidad" name="localidad" value="{{request.POST.localidad}}" >
+                    <div class="input-group-append">
+                      <button id="buscar" class="btn btn-outline-primary" type="submit">Buscar</button>
+                    </div>
                 </div>
-            </div>
-        </form>
-
+            </form>
+            {% endif %}
+                
         {# Opciones Barra Navegacion Usuario#}
         <ul class="navbar-nav ml-auto">
             
@@ -47,22 +54,24 @@
                         <a href=" {% url 'menu' %} " class="btn btn-outline-primary btn-sm mr-3">Menu Administracion</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a href=" {%url 'logout'%} " class="btn btn-outline-primary btn-sm">Cerrar Cesion</a>
-                    </li>
                 {% elif usuario.es_alumno %}
                     <li class="nav-item"><span class="mr-3 font-weight-bold">{{usuario.first_name}} {{usuario.last_name}}</span></li>
-
-                    <li class="nav-item">
-                        <a href="" class="btn btn-outline-primary btn-sm mr-3">Menu De Alumno</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href=" {%url 'logout'%} " class="btn btn-outline-primary btn-sm">Cerrar Cesion</a>
-                    </li>
-                {% else %}
-                    Es Profesor
+                    
+                    
+                    {% if miscursos %}
+                        <li class="nav-item">
+                            <a href="{% url 'home' %}" class="btn btn-outline-primary btn-sm mr-3">{{miscursos}}</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'misCursos' %}" class="btn btn-outline-primary btn-sm mr-3">Mis Cursos</a>
+                        </li>
+                    {% endif %}
+                    
                 {% endif %}
+                <li class="nav-item">
+                    <a href=" {%url 'logout'%} " class="btn btn-outline-primary btn-sm">Cerrar Cesion</a>
+                </li>
                     
                 
             {% else %}
@@ -77,89 +86,11 @@
             {% endif %}
         </ul>
     </header>
-           
     
-
-    <div class="container-fluid">
-        {% for loc in localidades %}
-            <p><h3>{{loc}}</h3></p>
-            
-            <div class="row mt-4">
-                {% for cso in cursos %}
-                    
-                    {% if cso.habilitado %}
-                        {% if cso.cenForm.localidad == loc %}
-                        <div class="col-sm-6 col-md-4 col-lg-3">
-
-                            <div class="card mb-3 shadow">
-                                <div class="card-header">
-                                    <div class="text-center font-weight-bold" style="height: 60px">
-                                        <span class="h3 font-weight-bold">{{cso.nombre | title}}</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="card-body">
-                                    <p class="card-text"> <b>Centro De Formacion:</b>
-                                        {{cso.cenForm}}
-                                    </p>
-                                    <p class="card-text"> <b>Localidad:</b>
-                                        {{cso.cenForm.localidad}}
-                                    </p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    
-                                    {% if cso.practico %}
-                                        <li class="list-group-item">Practico</li>
-                                    {% else %}
-                                    <li class="list-group-item">Teórico</li>
-                                    {% endif %}
-                                        
-                                    
-                                    <li class="list-group-item">Duracion: {{cso.cantHoras}} horas</li>
-                                    <li class="list-group-item">Inicia: {{cso.fechaInicio}} </li>
-                                    <li class="list-group-item">Finaliza: {{cso.fechaFin}} </li>
-                                </ul>
-                                <div class="card-footer">
-                                    
-                                    
-                                    {% if cso.inscAbierta %}
-                                        
-                                        {% if usuario.is_authenticated and usuario.es_alumno %}
-                                            
-                                            {% if cso in alumno.curso.all %}
-                                                INSCRIPTO
-                                            {% else %}
-                                                <p class="text-center">
-                                                    <a href="{% url 'inscCurso' cso.id %}" class="btn btn-success btn-block p-1">Inscribirse</a>
-                                                </p>
-                                            {% endif %}
-                                                
-                                        {% else %}
-                                            <p class="text-center">
-                                                <a href="{% url 'inscCurso' cso.id %}" class="btn btn-success btn-block p-1">Inscribirse</a>
-                                            </p>
-                                        {% endif %}
-                                            
-                                    {% else %}
-                                        <p class="text-center p-2">Proximamente</p>
-                                    {% endif %}
-                                        
-                                        
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
-                    {% endif %}
-                        
-                {% endfor %} {#For Cursos#}
-                                
-            </div> {#FIN ROW LISTADO DE CURSOS#}
-            <hr>
-        {% endfor %} {#For Localidades#}
+    {% block Contenido %}
         
+    {% endblock Contenido %}
             
-    </div> {# FIN CONTAINER PARA LISTADO DE CURSOS#}
-    
 
 
     {#JS jQuery, Popper, Bootstrap#}

@@ -1,0 +1,89 @@
+{% extends 'CFP/home.html' %}
+
+
+{% block Contenido %}
+        
+<div class="container-fluid">
+    <div class="row mt-4">
+        
+        {% for ca in alumno.cursoalumno_set.all %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card mb-3 shadow">
+                    <div class="card-header">
+                        <div class="text-center font-weight-bold" style="height: 60px">
+                            <span class="h3 font-weight-bold">{{ca.curso | title}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <p class="card-text"> <b>Centro De Formacion:</b>
+                            {{ca.curso.cenForm}}
+                        </p>
+                        <p class="card-text"> <b>Localidad:</b>
+                            {{ca.curso.cenForm.localidad}}
+                        </p>
+                        
+                        {# Asistencias #}
+                        {% if ca.porcAsist == None %}
+                        <p class="card-text"> <b>Asistencia:</b>
+                            0%
+                        </p>
+                        {% else %}
+                        <p class="card-text"> <b>Asistencia:</b>
+                            {{ca.porcAsist}}%
+                        </p>
+                        {% endif %}
+
+                        {# Notas #}
+                        {% if ca.notaCurso == None %}
+                        <p class="card-text"> <b>Asistencia:</b>
+                            Sin Nota
+                        </p>
+                        {% else %}
+                        <p class="card-text"> <b>Asistencia:</b>
+                            {{ca.notaCurso}}%
+                        </p>
+                        {% endif %}
+
+                        {# Aprobado #}
+                        
+                        {% if ca.aprobado %}
+                        <p class="text-center">
+                            <a href="" class="btn btn-success btn-block p-1">Aprobado!</a>
+                        </p>
+                        {% endif %}
+                            
+
+                            
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        
+                        {% if ca.curso.practico %}
+                            <li class="list-group-item">Practico</li>
+                        {% else %}
+                        <li class="list-group-item">Teórico</li>
+                        {% endif %}
+                            
+                        
+                        <li class="list-group-item">Duracion: {{ca.curso.cantHoras}} horas</li>
+                        <li class="list-group-item">Inicia: {{ca.curso.fechaInicio}} </li>
+                        <li class="list-group-item">Finaliza: {{ca.curso.fechaFin}} </li>
+                            
+                    </ul>
+                    <div class="card-footer">
+                        <ul class="list-group">
+                            {% for da in ca.curso.diasHorarios.all %}
+                                <li class="list-group-item">{{da}} de {{da.horaInicio}} a {{da.horaFin}} </li>
+                            {% endfor %}
+                        </ul>
+                        
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+            
+    </div>
+</div>    
+
+{% endblock Contenido %}
+    

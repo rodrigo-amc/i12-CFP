@@ -67,9 +67,47 @@ def home(request):
         'cursos' : cursosAll,
         'localidades':locs,
         'usuario' : usr,
-        'alumno' : amno
+        'alumno' : amno,
+        
     }
-    return render(request, 'CFP/home.html', ctxtHome)
+    return render(request, 'CFP/homePrincipal.html', ctxtHome)
+
+
+
+@login_required
+def misCursos(request):
+    #region LEEME CursoAlumno
+    # En el template accedo a los cursos del alumno a traves
+    # del modelo de relacion N a N "CursoAlumno". "curso" es
+    # un campo en el modelo "Alumno" que establece la relacion
+    # N a N entre "Alumno" y "Curso" a traves del modelo
+    # "AlumnoCurso". Como el campo de la relacion se
+    # establece en "Alummno", solo puedo acceder a
+    # este desde "Alumno" y no desde "Curso"
+    # (Ver modelos para entender)
+    # Lo hago asi para poder acceder a los campos de "AlumnoCurso"
+    # porcAsist, notaCurso y aprobado
+    #endregion
+    
+    user = request.user
+    
+    if user.es_alumno:
+        alumno = Alumno.objects.get(pk=request.user.id)
+
+        aluCtxt={
+            'usuario' : user,
+            'alumno' : alumno,
+            'titulo' : 'Menu Alumno',
+            'miscursos':'Todos Los Cursos'
+        }
+        
+        # miscursos
+        # paso la variable para levantarla en el header que hereda
+        # el template#
+
+        return render(request, 'CFP/homeAlumno.html', aluCtxt)
+    else:
+        return redirect('home')
 
 
 
