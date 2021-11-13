@@ -38,6 +38,8 @@ class Curso(models.Model):
     habilitado = models.BooleanField(default=False)
     practico = models.BooleanField(default=False)
     cantHoras = models.PositiveIntegerField(validators=[MinValueValidator(4)])
+    cupoMin = models.PositiveBigIntegerField(validators=[MinValueValidator(1)])
+    cupoMax = models.PositiveBigIntegerField(validators=[MinValueValidator(1)])
     fechaInicio = models.DateField()
     fechaFin = models.DateField()
     diasHorarios = models.ManyToManyField(diaHora)

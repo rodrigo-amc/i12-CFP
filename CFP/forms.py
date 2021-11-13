@@ -32,6 +32,8 @@ class frmCursos(ModelForm):
             'inscAbierta',
             'habilitado',
             'practico',
+            'cupoMin',
+            'cupoMax',
             'cantHoras',
             'fechaInicio',
             'fechaFin',
@@ -42,6 +44,8 @@ class frmCursos(ModelForm):
             'cenForm':'Centro De Formacion',
             'inscAbierta': 'Inscripcion Abierta',
             'practico':'Curso Practico',
+            'cupoMin':'Cupo Minimo',
+            'cupoMax':'Cupo Maximo',
             'cantHoras':'Cantidad De Horas',
             'fechaInicio':'Fecha De Inicio',
             'fechaFin':'Fecha De Finalizacion'
