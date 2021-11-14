@@ -1,0 +1,28 @@
+{% extends 'Usuarios/menuAdmin.html' %}
+
+{% block Contenido %}
+    {{cursos}}
+    <a href="{% url 'crearPreceptor' %}" class="btn btn-primary mb-4">Nuevo Preceptor</a>
+    {% for usr in usrsPrec %}
+        <p class='mt-4'>
+            <span>{{usr.preceptor.cfp}} | </span>
+            <span>{{usr.first_name}}</span>
+            <span>{{usr.last_name}}</span>
+            <span>| {{usr.preceptor.telefono}} </span>
+            <span class="ml-2"> | email: {{usr.email}}</span>
+            
+
+
+            <a href="{% url 'editPrec' usr.id %}" class="btn btn-warning ml-4">Editar</a>
+            
+            {% if usr.is_active %}
+                <a href="{% url 'deshabPrec' usr.id %}" class="ml-2 btn btn-danger">Deshabilitar</a>
+            {% else %}
+                <a href="" class="ml-2 btn btn-danger disabled">Deshabilitado</a>
+            {% endif %}
+                
+            
+        </p>
+    {% endfor %}
+
+{% endblock Contenido %}

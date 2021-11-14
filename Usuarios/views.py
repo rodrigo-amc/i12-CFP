@@ -2,11 +2,11 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
 
-from Usuarios.forms import frmAlumno, frmUsuario, frmProfesor, frmUsrProf
+from Usuarios.forms import frmAlumno, frmPreceptor, frmUsuario, frmProfesor, frmUsrProf, Preceptor
 from .models import Alumno, Profesor, appUser
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from CFP.models import Curso, Localidad
+from CFP.models import CentroDeFormacion, Curso, Localidad
 
 # Create your views here.
 
@@ -135,6 +135,7 @@ def crearAlumno(request):
 
 
 
+#region Profesores
 @login_required
 def lstProfesores(request):
     if request.user.is_superuser:
@@ -185,10 +186,11 @@ def crearProfesor(request):
                 )
                 profe.save()
 
-                return HttpResponse(
+                """ return HttpResponse(
                     'nombre: {0}</br>Apellido: {1}</br>Email: {2}</br>Password: {3}</br>Telefono: {4}'
                     .format(nombre, apellido, mail, pswd, tel)
-                    )
+                    ) """
+                return redirect('profesores')
 
             else:
                 for mensaje in frmPostU.errors:
@@ -278,3 +280,154 @@ def profDeshabilitar(request, idUsr):
         return redirect('profesores')
     else:
         return HttpResponse('naditas')
+#endregion
+
+
+
+#region Preceptores
+@login_required
+def lstPreceptores(request):
+    if request.user.is_superuser:
+        preceptores = appUser.objects.all().filter(es_preceptor=True)
+        ctx={
+            'usrsPrec': preceptores,
+            'titulo': 'Preceptores'
+        }
+        return render(request, 'Usuarios/preceptores.html', ctx)
+    else:
+        return redirect('login')
+
+
+
+@login_required
+def crearPreceptor(request):
+    if request.user.is_superuser:
+        getDict={
+            'titulo': 'Registrar Nuevo Preceptor',
+            # Uso el mismo formulario que usi para
+            # "Profesor" ya que me sirve para este
+            # modelo
+            'frmUsuario': frmUsrProf(),
+            'formPreceptor': frmPreceptor()
+        }
+        if request.method == 'POST':
+            frmPostUsr = frmUsrProf(request.POST)
+            frmPostPre = frmPreceptor(request.POST)
+
+            if frmPostPre.is_valid() and frmPostUsr.is_valid():
+                nombre = request.POST.get('first_name')
+                apellido = request.POST.get('last_name')
+                mail = request.POST.get('email')
+                pswd = str(nombre).lower()+str(apellido).lower()
+                tel = request.POST.get('telefono')
+                centro = CentroDeFormacion.objects.get(pk=request.POST.get('cfp'))
+
+                usuario = appUser(
+                    first_name = nombre,
+                    last_name = apellido,
+                    email = mail,
+                    password = pswd
+                )
+                usuario.set_password(pswd)
+                usuario.username = mail
+                usuario.es_preceptor = True
+                usuario.save()
+
+                preceptor = Preceptor(
+                    usr = usuario,
+                    telefono = tel,
+                    cfp = centro 
+                )
+                preceptor.save()
+
+                return redirect('preceptores')
+
+            else:
+                for mensaje in frmPostUsr.errors:
+                    messages.error(request, frmPostUsr.errors[mensaje])
+                    return render(request, 'Usuarios/formPreceptor.html',
+                    {
+                        'formPreceptor': frmPostPre,
+                        'frmUsuario': frmPostUsr,
+                        'titulo':'Registrar Nuevo Preceptor'
+                    })
+
+                for mensaje in frmPostPre.errors:
+                    messages.error(request, frmPostPre.errors[mensaje])
+                    return render(request, 'Usuarios/formPreceptor.html',
+                    {
+                        'formPreceptor': frmPostPre,
+                        'frmUsuario': frmPostUsr,
+                        'titulo':'Registrar Nuevo Preceptor'
+                    })
+        
+        else:
+            return render(request, 'Usuarios/formPreceptor.html', getDict)
+        
+    else:
+        return redirect('home')
+
+
+
+@login_required
+def editarPreceptor(request, idUsr):
+    if request.user.is_superuser:
+        usr = appUser.objects.get(pk=idUsr)
+        prec = Preceptor.objects.get(pk=idUsr)
+
+        if request.method == 'GET':
+            frmUsr = frmUsrProf(instance=usr)
+            frmPre = frmPreceptor(instance=prec)
+
+            ctxGet = {
+                'titulo': 'Editar Datos De Preceptor',
+                'frmUsuario': frmUsr,
+                'formPreceptor': frmPre
+            }
+
+            return render(request, 'Usuarios/formPreceptor.html', ctxGet)
+        
+        elif request.method == 'POST':
+            usrPost = frmUsrProf(request.POST, instance=usr)
+            prePost = frmPreceptor(request.POST, instance=prec)
+
+            if usrPost.is_valid() and prePost.is_valid:
+                usrPost.save()
+                prePost.save()
+                return redirect('preceptores')
+            else:
+                for mensaje in usrPost.errors:
+                    messages.error(request, usrPost.errors[mensaje])
+                    return render(request, 'Usuarios/formPreceptor.html',
+                    {
+                        'formPreceptor': prePost,
+                        'frmUsuario': usrPost,
+                        'titulo':'Editar Datos De Preceptor'
+                    })
+
+                for mensaje in prePost.errors:
+                    messages.error(request, prePost.errors[mensaje])
+                    return render(request, 'Usuarios/formPreceptor.html',
+                    {
+                        'formPreceptor': prePost,
+                        'frmUsuario': usrPost,
+                        'titulo':'Editar Datos De Preceptor'
+                    })
+        
+        else:
+            return HttpResponse('naditas')    
+    else:
+        return redirect('home')
+
+
+
+@login_required
+def deshabilitarPreceptor(request, idUsr):
+    usr = appUser.objects.get(pk = idUsr)
+    if request.user.is_superuser and usr.es_preceptor:
+        usr.is_active = False
+        usr.save()
+        return redirect('preceptores')
+    else:
+        return redirect('home')
+#endregion Preceptores

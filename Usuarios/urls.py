@@ -1,3 +1,4 @@
+from collections import namedtuple
 from django.urls import path
 from Usuarios import views
 from django.conf import settings
@@ -8,10 +9,18 @@ urlpatterns = [
     path('', views.logIn, name='login'),
     path('menu', views.menu, name='menu'),
     path('crearAlumno', views.crearAlumno, name='crearAlumno'),
+
+    #Profesores
     path('profesores', views.lstProfesores, name='profesores'),
     path('crearProfesor', views.crearProfesor, name='crearProfesor'),
     path('editProf/<int:idUsr>', views.editarProfesor, name='editProf'),
-    path('deshabProf/<int:idUsr>', views.profDeshabilitar, name='deshabProf')
+    path('deshabProf/<int:idUsr>', views.profDeshabilitar, name='deshabProf'),
+
+    #Preceptores
+    path('preceptores', views.lstPreceptores, name='preceptores'),
+    path('crearPreceptor', views.crearPreceptor, name='crearPreceptor'),
+    path('editPrec/<idUsr>', views.editarPreceptor, name='editPrec'),
+    path('deshabPrec/<idUsr>', views.deshabilitarPreceptor, name='deshabPrec')
 ]
 
 # Ruta para las imagenes

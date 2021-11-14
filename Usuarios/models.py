@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models.deletion import DO_NOTHING
-from CFP.models import Localidad, Curso
+from CFP.models import CentroDeFormacion, Localidad, Curso
 # Create your models here.
 """
 Por ahora solo voy a crear Alumno y Profesor
@@ -13,6 +13,7 @@ que implementa el framework
 class appUser(AbstractUser):
     es_alumno = models.BooleanField(default=False)
     es_profesor = models.BooleanField(default=False)
+    es_preceptor = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
@@ -58,7 +59,6 @@ class CursoAlumno(models.Model):
 
 
 
-
 class Profesor(models.Model):
     usr_profesor = models.OneToOneField(appUser, on_delete=models.CASCADE, primary_key=True)
     telefono = models.CharField(max_length=20)
@@ -72,3 +72,10 @@ class Profesor(models.Model):
         lname = self.usr_profesor.last_name
         fname = str(name+' '+lname)
         return fname
+
+
+
+class Preceptor(models.Model):
+    usr = models.OneToOneField(appUser, on_delete=models.CASCADE, primary_key=True)
+    telefono = models.CharField(max_length=20)
+    cfp = models.ForeignKey(CentroDeFormacion, on_delete=models.CASCADE)

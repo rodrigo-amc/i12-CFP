@@ -1,5 +1,5 @@
 from django import forms
-from .models import appUser, Alumno, Profesor
+from .models import Preceptor, appUser, Alumno, Profesor
 
 #Widgets
 class widgetFecha(forms.DateInput):
@@ -109,3 +109,18 @@ class frmUsrProf(forms.ModelForm):
             raise forms.ValidationError('Por favor ingresa un apellido con al menos 3 letras')
         else:
             return apellido
+
+
+
+class frmPreceptor(forms.ModelForm):
+    class Meta:
+        model = Preceptor
+        fields = [
+            'telefono',
+            'cfp'
+            ]
+
+        labels = {
+            'telefono':'Telefono',
+            'cfp': 'Centro De Formacion'
+        }
