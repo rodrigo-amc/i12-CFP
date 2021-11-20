@@ -23,6 +23,8 @@ urlpatterns = [
     path('inscCurso/<int:cId>', views.inscCurso, name='inscCurso'),
 
     #Preceptor Cursos
-    path('preLstCursos', views.preLstCursos, name='preLstCursos')
+    path('preLstCursos', views.preLstCursos, name='preLstCursos'),
+    path('preCursoNuevo', views.preCursoNuevo, name='preCursoNuevo'),
+    path('preCursoEditar/<int:idCurso>', views.preCursoEditar, name='preCursoEditar')
 
 ]

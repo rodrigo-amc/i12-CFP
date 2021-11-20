@@ -3,7 +3,7 @@
 
 {% block Contenido %}
     <p class="text-center"> {{cfp}} | {{cfp.localidad}}</p>    
-    <a href="{% url 'crearPreceptor' %}" class="btn btn-primary mb-4">Nuevo Curso</a>
+    <a href="preCursoNuevo" class="btn btn-primary mb-4">Nuevo Curso</a>
 
     
     <div class="row mt-4">
@@ -29,6 +29,13 @@
                         {% else %}
                             <p class="text-center p-2">Inscripcion: NO Disponible</p>
                         {% endif %}
+
+                        <a href="{% url 'preCursoEditar' c.id %}" class="btn btn-warning btn-block btn-sm">Editar</a>
+                        
+                        {% if not c.habilitado %}
+                        <p class="text-center p-2 mb-0 font-weight-bold ">Deshabilitado</p>
+                        {% endif %}
+                            
                             
                     </div>
 

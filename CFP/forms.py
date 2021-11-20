@@ -55,3 +55,40 @@ class frmCursos(ModelForm):
             'fechaInicio' : widgetFecha(),
             'fechaFin' : widgetFecha()
         }
+
+
+
+#region Preceptor
+class preFrmCursos(ModelForm):
+    class Meta:
+        model = Curso
+
+        fields = [
+            'nombre',
+            'profesor',
+            'inscAbierta',
+            'habilitado',
+            'practico',
+            'cupoMin',
+            'cupoMax',
+            'cantHoras',
+            'fechaInicio',
+            'fechaFin',
+        ]
+
+        labels = {
+            'nombre':'Nombre',
+            'inscAbierta': 'Inscripcion Abierta',
+            'practico':'Curso Practico',
+            'cupoMin':'Cupo Minimo',
+            'cupoMax':'Cupo Maximo',
+            'cantHoras':'Cantidad De Horas',
+            'fechaInicio':'Fecha De Inicio',
+            'fechaFin':'Fecha De Finalizacion'
+        }
+
+        widgets = {
+            'fechaInicio' : widgetFecha(),
+            'fechaFin' : widgetFecha()
+        }
+#endregion

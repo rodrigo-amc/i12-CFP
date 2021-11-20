@@ -1,12 +1,11 @@
 from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from CFP.forms import frmCentroFormacion, frmCursos, frmLocalidad
+from CFP.forms import frmCentroFormacion, frmCursos, preFrmCursos, frmLocalidad
 from django.contrib import messages
 
-from Usuarios.models import Alumno, CursoAlumno, Profesor, appUser
+from Usuarios.models import Alumno, CursoAlumno, Profesor
 from .models import CentroDeFormacion, Curso, Localidad
-from django.db.models import Q
 # Create your views here.
 
 
@@ -475,5 +474,160 @@ def preLstCursos(request):
     else:
         return redirect('home')
 
+
+
+#region Prec CRUD Cursos
+@login_required
+def preCursoNuevo(request):
+    if request.user.es_preceptor:
+        usr = request.user
+        preCenFor = usr.preceptor.cfp
+        formCurso = preFrmCursos()
+        
+        ctxt = {
+            'form': formCurso,
+            'titulo': str(preCenFor)+' Nuevo Curso'
+        }
+
+        if request.method == 'POST':
+            formPost = preFrmCursos(request.POST)
+
+            if formPost.is_valid():
+                #formPost.save()
+                
+                dias = request.POST.getlist('dias')
+                fIni = request.POST.getlist('horaInicio')
+                fFin = request.POST.getlist('horaFin')
+                
+                cursoNuevo = Curso()
+                cursoNuevo.nombre = request.POST.get('nombre')
+                cursoNuevo.cenForm = CentroDeFormacion.objects.get(pk=preCenFor.id)
+                cursoNuevo.cantHoras = request.POST.get('cantHoras')
+                cursoNuevo.fechaInicio = request.POST.get('fechaInicio')
+                cursoNuevo.fechaFin = request.POST.get('fechaFin')
+                cursoNuevo.cupoMin = request.POST.get('cupoMin')
+                cursoNuevo.cupoMax = request.POST.get('cupoMax')
+                # Asigno Profesor
+                pid = request.POST.get('profesor')
+                if pid != '':
+                    cursoNuevo.profesor = Profesor.objects.get(pk=pid)
+                
+                #region Checkbox
+                # Compruebo el valor de los checboxes
+                # Si están seleccionados en el formulario llega por POST
+                # una variable con el nombre del campo. Sino, no llega
+                # la variable es porque no fue seleccionado, por eso
+                # solo compruebo que llegue la variable y no su valor
+                #endregion
+                if request.POST.get('inscAbierta'):
+                    cursoNuevo.inscAbierta = True
+                
+                if request.POST.get('habilitado'):
+                    cursoNuevo.habilitado = True
+
+                if request.POST.get('practico'):
+                    cursoNuevo.practico = True
+                
+                cursoNuevo.save()
+
+                for i in range(len(dias)):
+                    nuevoDiaHora = cursoNuevo.diasHorarios.create(dia=dias[i], horaInicio=fIni[i], horaFin=fFin[i])
+                
+                return redirect('/preLstCursos')
+            else:
+                for mensaje in formPost.errors:
+                    messages.error(request, formPost.errors[mensaje])
+                    print(mensaje)
+                    return render(request, 'CFP/preCursoForm.html', {'form': formPost, 'titulo': 'Nuevo Curso ERRORES'})
+        
+        else:
+            return render(request, 'CFP/preCursoForm.html', ctxt)
+
+    else:
+        return HttpResponse('Solo disponible para usuario Administrador')
+
+
+
+@login_required
+def preCursoEditar(request, idCurso):
+    if request.user.es_preceptor:
+        cenFor = request.user.preceptor.cfp
+        curso = Curso.objects.get(pk=idCurso)
+        frEditar = preFrmCursos()
+
+        if request.method == 'GET':
+            frEditar = preFrmCursos(instance=curso)
+            
+            ctxGET = {
+                'form':frEditar,
+                'curso': curso,
+                'titulo': str(cenFor)+' Editar Curso'
+            }
+            return render(request, 'CFP/preCursoFormEdit.html', ctxGET)
+        
+        #POST
+        else:
+            dias = request.POST.getlist('dias')
+            fIni = request.POST.getlist('horaInicio')
+            fFin = request.POST.getlist('horaFin')
+            frEditar = preFrmCursos(request.POST, instance=curso)
+            
+            if frEditar.is_valid():
+                #Obtengo el Profesor seleccionado en el form
+                comboProfe = request.POST.get('profesor')
+                if comboProfe != '':            
+                    #Asigno al curso el profesor filtrado por id
+                    profe = Profesor.objects.get(pk=comboProfe)
+                    curso.profesor = profe
+                else:
+                    curso.profesor = None
+
+                #checkboxes
+                if request.POST.get('inscAbierta'):
+                    curso.inscAbierta = True
+                else:
+                    curso.inscAbierta = False
+
+                if request.POST.get('habilitado'):
+                    curso.habilitado = True
+                else:
+                    curso.habilitado = False
+
+                if request.POST.get('practico'):
+                    curso.practico = True
+                else:
+                    curso.practico = False
+                
+                
+                #Editar Dias y Horas
+                if len(dias)!=0:
+                    dhs = curso.diasHorarios.all()
+                    for dh in dhs:
+                        dh.delete()
+                    for i in range(len(dias)):
+                        nuevoDiaHora = curso.diasHorarios.create(dia=dias[i], horaInicio=fIni[i], horaFin=fFin[i])
+                    frEditar.save()
+                    #return HttpResponse(dhs)
+                else:
+                    frEditar.save()
+
+                return redirect('/preLstCursos')
+            
+            # Si el form no es valido
+            else:
+                ctxtPOST = {
+                    'form': frEditar,
+                    'titulo': str(cenFor)+' Editar Curso - Corregir Errores'
+                }
+                for mensaje in frEditar.errors:
+                    messages.error(request, frEditar.errors[mensaje])
+                    return render(request, 'CFP/preCursoFormEdit.html', ctxtPOST)
+            
+            return redirect('/preLstCursos')
     
+    #Si el usuario no es preceptor
+    else:
+        return redirect('/home')
+
+#endregion
 #endregion
