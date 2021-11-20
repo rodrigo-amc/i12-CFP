@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFP {{usuario.preceptor.cfp}} | {{usuario.username}} </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CFP/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'CFP/css/estilos.css' %}">
+
+</head>
+<body>
+    <section class="container">
+
+        {% comment %}
+        ----------------------------------------------------------------
+                                BARRA NAVEGACION
+        ----------------------------------------------------------------
+        {% endcomment %}
+    
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">{{usuario.preceptor.cfp}}  Preceptor {{usuario.first_name}} {{usuario.last_name}} </a>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'preLstCursos' %}" id="navbarDropdownMenuLink" >
+                            Cursos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="navbarDropdownMenuLink" >
+                            Alumnos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="navbarDropdownMenuLink" >
+                            Profesores
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link " href="{% url 'logout' %}">Cerrar Sesion</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        {% comment %}
+        ----------------------------------------------------------------
+                                FIN BARRA NAVEGACION
+        ----------------------------------------------------------------
+        {% endcomment %}
+        
+        <p class="h3 text-center mt-2">{{titulo}}</p>
+
+        {% block Contenido %}
+            
+        {% endblock Contenido %}
+    </section>
+
+
+    <!--JS jQuery, Popper, Bootstrap-->
+    <script src=" {% static 'CFP/js/jquery-3.6.0.min.js' %} "></script>
+    <script src=" {% static 'CFP/js/popper.min.js' %} "></script>
+    <script src=" {% static 'CFP/js/bootstrap.min.js' %} "></script>
+</body>
+</html>

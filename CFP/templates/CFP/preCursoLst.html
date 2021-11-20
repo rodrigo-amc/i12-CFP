@@ -1,0 +1,74 @@
+{% extends 'Usuarios/menuPreceptor.html' %}
+
+
+{% block Contenido %}
+    <p class="text-center"> {{cfp}} | {{cfp.localidad}}</p>    
+    <a href="{% url 'crearPreceptor' %}" class="btn btn-primary mb-4">Nuevo Curso</a>
+
+    
+    <div class="row mt-4">
+        
+        {% for c in cursos %}
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="card mb-3 shadow">
+                    <div class="card-header">
+                        <div class="text-center font-weight-bold" style="height: 130px">
+                            <span class="h3 font-weight-bold">{{c.nombre | title}}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        
+                        {% comment %}
+                        <p class="card-text"> <b>Localidad:</b>
+                            {{c.cenForm.localidad}}
+                        </p>
+                        {% endcomment %}
+                        {% if c.inscAbierta %}
+                            <p class="text-center p-2">Inscripcion: Disponible</p>
+                        {% else %}
+                            <p class="text-center p-2">Inscripcion: NO Disponible</p>
+                        {% endif %}
+                            
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        
+                        {% if c.practico %}
+                            <li class="list-group-item">Práctico</li>
+                        {% else %}
+                            <li class="list-group-item">Teórico</li>
+                        {% endif %}
+                            
+                        
+                        <li class="list-group-item">Duracion: {{c.cantHoras}} horas</li>
+                        <li class="list-group-item">Cupo Minimo: {{c.cupoMin}}</li>
+                        <li class="list-group-item">Cupo Maximo: {{c.cupoMax}}</li>
+                        <li class="list-group-item">Inscriptos: {{c.cantAl}}</li>
+                        <li class="list-group-item">Inicia: {{c.fechaInicio}} </li>
+                        <li class="list-group-item">Finaliza: {{c.fechaFin}} </li>
+                    </ul>
+                    <div class="card-footer p-1">
+                        <span class="text-center">Dias Y Horarios</span>
+                        <ul class="list-group">
+                            
+                            {% if c.diasHorarios.all %}
+                                {% for da in c.diasHorarios.all %}
+                                    <li class="list-group-item">{{da}} de {{da.horaInicio}} a {{da.horaFin}} </li>
+                                {% endfor %}    
+                            {% else %}
+                                <span class="text-center">Sin Asignar</span>
+                            {% endif %}
+                                 
+                        </ul>
+                            
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+            
+    </div>
+    
+        
+{% endblock Contenido %}
+    

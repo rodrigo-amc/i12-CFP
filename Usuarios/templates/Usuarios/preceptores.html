@@ -1,7 +1,7 @@
 {% extends 'Usuarios/menuAdmin.html' %}
 
 {% block Contenido %}
-    {{cursos}}
+    
     <a href="{% url 'crearPreceptor' %}" class="btn btn-primary mb-4">Nuevo Preceptor</a>
     {% for usr in usrsPrec %}
         <p class='mt-4'>

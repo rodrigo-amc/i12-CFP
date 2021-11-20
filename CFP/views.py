@@ -111,7 +111,7 @@ def misCursos(request):
 
 
 
-#region Localidades
+#region CRUD Localidades
 @login_required
 def localidadNueva(request):
     if request.user.is_superuser:
@@ -190,7 +190,7 @@ def localidadBorrar(request, idLocalidad):
 
 
 
-#region Centros De Formacion
+#region CRUD Centros De Formacion
 @login_required
 def centros(request):
     ctxt = {
@@ -270,7 +270,7 @@ def centroBorrar(request, idCentro):
 
 
 
-#region Cursos
+#region CRUD Cursos
 @login_required
 def cursoNuevo(request):
     if request.user.is_superuser:
@@ -297,6 +297,8 @@ def cursoNuevo(request):
                 cursoNuevo.cantHoras = request.POST.get('cantHoras')
                 cursoNuevo.fechaInicio = request.POST.get('fechaInicio')
                 cursoNuevo.fechaFin = request.POST.get('fechaFin')
+                cursoNuevo.cupoMin = request.POST.get('cupoMin')
+                cursoNuevo.cupoMax = request.POST.get('cupoMax')
                 # Asigno Profesor
                 pid = request.POST.get('profesor')
                 if pid != '':
@@ -421,6 +423,8 @@ def cursoEditar(request, idCurso):
                 return render(request, 'CFP/cursosFormEdit.html', ctxtPOST)
         
         return redirect('/cursos')
+#endregion Cursos
+
 
 
 @login_required
@@ -433,9 +437,43 @@ def inscCurso(request, cId):
             curso = cur
         )
         insc.save()
+        cur.cantAl+=1
+        cur.save()
         return redirect('home')
     else:
         return HttpResponse('no es alumno')
 
 
-#endregion Cursos
+
+
+#region Preceptor Funciones
+@login_required
+def preLstCursos(request):
+    '''Preceptor Listado De Cursos'''
+    
+    if request.user.es_preceptor:
+        
+        #usuario logueado
+        usr = request.user
+        
+        #CFP asociado al preceptor
+        preCfp = usr.preceptor.cfp
+
+        #Cursos asociados al CFP del preceptor
+        preCursos = Curso.objects.all().filter(cenForm=preCfp)
+        
+
+        ctxt = {
+            'cfp' : preCfp,
+            'cursos' : preCursos,
+            'usuario' : usr,
+            'titulo' : 'Cursos'
+        }
+        
+        return render(request, 'CFP/preCursoLst.html', ctxt)
+
+    else:
+        return redirect('home')
+
+    
+#endregion

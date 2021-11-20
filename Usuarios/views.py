@@ -23,15 +23,25 @@ def menu(request):
     
     if request.user.is_superuser:
         adminCtxt={
-            'titulo':'Menu Administracion'
+            'titulo':'Menu De Administracion'
         }
         return render(request, 'Usuarios/menuAdmin.html', adminCtxt)
+    
+    elif request.user.es_preceptor:
+        user = appUser.objects.get(pk=request.user.id)
+        precCtxt={
+            'usuario':user,
+            'titulo':'Preceptor'
+        }
+        
+        return render(request, 'Usuarios/menuPreceptor.html', precCtxt)
+        
     else:
         return redirect('/')
 
 
 
-#region Alumno
+#region CRUD Alumno
 def crearAlumno(request):
     ctxtGET = {
         'formAlumno': frmAlumno(),
@@ -135,7 +145,7 @@ def crearAlumno(request):
 
 
 
-#region Profesores
+#region CRUD Profesores
 @login_required
 def lstProfesores(request):
     if request.user.is_superuser:
@@ -284,7 +294,7 @@ def profDeshabilitar(request, idUsr):
 
 
 
-#region Preceptores
+#region CRUD Preceptores
 @login_required
 def lstPreceptores(request):
     if request.user.is_superuser:
@@ -328,6 +338,10 @@ def crearPreceptor(request):
                     email = mail,
                     password = pswd
                 )
+                print('#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#')
+                print(pswd)
+                print(usuario.password)
+                print('#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#')
                 usuario.set_password(pswd)
                 usuario.username = mail
                 usuario.es_preceptor = True
