@@ -630,4 +630,60 @@ def preCursoEditar(request, idCurso):
         return redirect('/home')
 
 #endregion
+
+#region Prec Listar Alumnos
+@login_required
+def preLstAlu(request):
+    '''Lista Todos Los Alumnos Relacionados al Centro
+    De Formacion Al Que Pertenece El Preceptor'''
+    if request.user.es_preceptor:
+
+        # Obtengo el cfp al que pertenece el preceptor
+        preCfp = request.user.preceptor.cfp
+
+        #Obtengo Todos los alumnos
+        alumnos = Alumno.objects.all()
+
+        #Lista en la que solo estan los alumnos relacionados
+        # al cfp relacionado con el preceptor
+        alsCfp = []
+
+        # Itero sobre los alumnos
+        for a in alumnos:
+            #itero sobre los cursos del alumno
+            for c in a.curso.all():
+                #si el curso pertenece al cfp del preceptor
+                if c.cenForm == preCfp:
+                    #si el alumno ya esta en la lista "alsCfp"
+                    if a in alsCfp:
+                        #saltea
+                        pass
+                    #sino lo agrega a la lista "alsCfp"
+                    else:
+                        alsCfp.append(a)
+
+        ctxt = {
+            'centroform': preCfp,
+            'alumnos': alsCfp,
+            'titulo': str(preCfp)+' Alumnos'
+        }
+            
+        return render(request, 'CFP/preLstAlumnos.html', ctxt)
+    else:
+        return redirect('home')
+
+
+@login_required
+def preVerAlumno(request, aluID):
+    if request.user.es_preceptor:
+        alumno = Alumno.objects.get(pk = aluID)
+        ctx = {
+            'alu':alumno,
+            'titulo': 'Datos Del Alumno '+str(alumno.usr_alumno.first_name)+' '+str(alumno.usr_alumno.last_name)
+        }
+        
+        return render(request, 'CFP/preVerAlumno.html', ctx)
+    else:
+        return redirect('home')
+#endregion
 #endregion

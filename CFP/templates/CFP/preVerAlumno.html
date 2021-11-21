@@ -1,0 +1,83 @@
+{% extends 'Usuarios/menuPreceptor.html' %}
+
+
+{% block Contenido %}
+    <div class="row mt-5 mb-4">
+        <div class="col-md-4 shadow">
+            <p>DNI: {{alu.Dni}}</p>
+            <p>
+                <img class="img-responsive" src="{{ MEDIA_URL }} {{alu.DniImg.url}}" alt="DniImg" style="width: 100%;">
+            </p>
+        </div>
+
+        <div class="col-md-4 shadow">
+            <p>Autorizacion</p>
+            <p>
+                {% if alu.Autorizacion %}
+                    <img class="img-responsive" src="{{ MEDIA_URL }} {{alu.Autorizacion.url}}" alt="DniImg" style="width: 100%;">
+                {% else %}
+                    No Requiere
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="col-md-4 shadow">
+            <p>Fecha De Nacimiento: {{alu.fecha_nacimiento | date:"SHORT_DATE_FORMAT" }}</p>
+            <p>Telefono: {{alu.Telefono}} </p>
+            <p>Email: {{alu.usr_alumno.email}} </p>
+            <p>Domicilio: {{alu.Domicilio}} </p>
+            <p>Localidad: {{alu.localidad}} </p>
+
+        </div>
+    </div>
+    <hr>
+    <p class="mt-4">
+        <h4 class="text-center" >
+            Todos Los Cursos
+        </h4>
+    </p>
+    <table class="table table-hover">
+        <tr>
+            <th scope="col">Centro De Formacion</th>
+            <th scope="col">Localidad</th>
+            <th scope="col">Curso</th>
+            <th scope="col">Asistencia</th>
+            <th scope="col">Nota</th>
+            <th scope="col">Aprobado</th>
+
+        </tr>
+        {% for c in alu.cursoalumno_set.all %}
+        <tr>
+            <td>{{c.curso.cenForm}}</td>
+            <td>{{c.curso.cenForm.localidad}}</td>
+            <td> {{c.curso.nombre}} </td>
+            
+            {% if c.porcAsist %}
+            <td> {{c.porcAsist}}%</td>
+            {% else %}
+            <td> 0% </td>
+            {% endif %}
+
+            {% if c.notaCurso %}
+            <td> {{c.notaCurso}}</td>
+            {% else %}
+            <td> Sin Nota </td>
+            {% endif %}
+
+            {% if c.aprobado %}
+            <td> Aprobado</td>
+            {% else %}
+            <td> No </td>
+            {% endif %}
+                
+        </tr>
+    {% endfor %}
+            
+    </table>
+{% endblock Contenido %}
+
+
+{% block jquery %}
+    
+{% endblock jquery %}
+    

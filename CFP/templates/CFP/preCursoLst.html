@@ -30,7 +30,8 @@
                             <p class="text-center p-2">Inscripcion: NO Disponible</p>
                         {% endif %}
 
-                        <a href="{% url 'preCursoEditar' c.id %}" class="btn btn-warning btn-block btn-sm">Editar</a>
+                        <a href="{% url 'preCursoEditar' c.id %}" class="btn btn-warning btn-block btn-sm">Editar Datos De Curso</a>
+                        <a href="" class="btn btn-success btn-block btn-sm">Notas Y Asistencias</a>
                         
                         {% if not c.habilitado %}
                         <p class="text-center p-2 mb-0 font-weight-bold ">Deshabilitado</p>

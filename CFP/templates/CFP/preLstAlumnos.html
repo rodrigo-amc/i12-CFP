@@ -1,0 +1,48 @@
+{% extends 'Usuarios/menuPreceptor.html' %}
+
+
+{% block Contenido %}
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Email</th>
+                <th scope="col">Telefono</th>
+                <th scope="col">Domicilio</th>
+                <th scope="col">Localidad</th>
+                <th scope="col">DNI</th>
+                <th scope="col">Fecha De Nacimiento</th>
+                <th scope="col">Ver Mas</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for a in alumnos %}
+                <tr>
+                    <td>{{a.usr_alumno.first_name}}</td>
+                    <td>{{a.usr_alumno.last_name}}</td>
+                    <td>{{a.usr_alumno.email}}</td>
+                    <td>{{a.Telefono}}</td>
+                    <td>{{a.Domicilio}}</td>
+                    <td>{{a.localidad}}</td>
+                    <td>{{a.Dni}}</td>
+                    <td>{{a.fecha_nacimiento | date:"SHORT_DATE_FORMAT" }}</td>
+                    <td>
+                        <a href="{% url 'preVerAlumno' a.usr_alumno.id%}" class="btn btn-success btn-sm">Ver</a>
+                    </td>
+                </tr>
+            {% endfor %}
+                
+        </tbody>
+
+    </table>
+    
+        
+{% endblock Contenido %}
+
+
+{% block jquery %}
+    
+{% endblock jquery %}
+    
