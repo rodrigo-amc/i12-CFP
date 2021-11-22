@@ -2,11 +2,68 @@
 
 
 {% block Contenido %}
-    
+
+    <form action="" method="POST" autocomplete="off" class="mt-5">
+        {% csrf_token %}
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Alumno</th>
+                    <th scope="col">DNI</th>
+                    <th scope="col">Porcentaje De Asistencia</th>
+                    <th scope="col">Nota Del Curso</th>
+                    <th scope="col">Aprobado</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                
+                {% for ca in cuAl %}
+                    
+                    {% if not ca.aprobado %}
+                        <tr>
+                            {# Nombre y apellido #}
+                            <td id="{{ca.id}}">
+                                {{ca.alumno.usr_alumno.first_name}} {{ca.alumno.usr_alumno.last_name}}
+                                <input type="hidden" name="cursoalumno" value="{{ca.id}}">
+                            </td>
+
+                            {# DNI Del Alumno #}
+                            <td>
+                                {{ca.alumno.Dni}}
+                            </td>
+                            
+                            {# Porcentaje De Asistencia #}
+                            <td>
+                                <input class="form-control" type="number" name="asistCurso" id="{{ca.id}}" value="{{ca.porcAsist}}" max="100">
+                            </td>
+                            
+                            {# Nota Del Curso #}
+                            <td>
+                                <input class="form-control" type="number" name="notaCurso" id="" value="{{ca.notaCurso}}" max="10">
+                            </td>
+
+                            {# Checkbox para valor "Aprobado" #}
+                            <td>
+                                <input class="form-check-input ml-4" type="checkbox" name="aprobado{{ca.id}}">
+                            </td>
+                        </tr>
+                    {% endif %}
+                        
+                    
+
+                {% endfor %}
+                    
+            </tbody>
+        </table>
+
+        <input type="submit" value="Aceptar">
+    </form>
+
 {% endblock Contenido %}
 
 
 {% block jquery %}
     
 {% endblock jquery %}
-    

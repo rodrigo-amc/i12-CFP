@@ -348,6 +348,7 @@ def cursoLista(request):
     return render(request, 'CFP/cursos.html', ctxt)
 
 
+
 @login_required
 def cursoEditar(request, idCurso):
     curso = Curso.objects.get(pk=idCurso)
@@ -441,7 +442,6 @@ def inscCurso(request, cId):
         return redirect('home')
     else:
         return HttpResponse('no es alumno')
-
 
 
 
@@ -686,4 +686,64 @@ def preVerAlumno(request, aluID):
     else:
         return redirect('home')
 #endregion
+
+#region Prec Notas y Asistencias
+@login_required
+def preNotAsi(request, cId):
+    '''Controlador para asignar notas y asistencias del curso'''
+    if request.user.es_preceptor:
+        
+        # Obtengo el cfp al que pertenece el preceptor
+        usr = request.user
+
+        #Ontengo el curso seleccionado en template
+        cursoSelect = Curso.objects.get(pk=cId)
+
+        """#Obtengo todos los alumnos relacionados a este curso
+        #Recordar que en la relacion N a N, Alumno tiene el
+        #campo "curso", pero curso NO tiene campo "Alumno"
+        #por eso accedo con "_set.all()"
+        alsCso = cursoSelect.alumno_set.all()"""
+        
+        
+        #PROBANDO CON cursoalumno
+        #OJO NO ENVIAR ALUMNOS CON "APROBADO"==True
+        curso_Alumno = CursoAlumno.objects.filter(curso = cursoSelect)
+
+        ctxt = {
+                'usuario': usr,
+                'cuAl': curso_Alumno,
+                'idCurso': cId,
+                'titulo': str(cursoSelect)+ ': Notas y Asistencias'
+            }        
+            
+
+
+        if request.method == 'POST':
+            csoAls = request.POST.getlist('cursoalumno')
+            asistencias = request.POST.getlist('asistCurso')
+            notas = request.POST.getlist('notaCurso')
+
+            for i in range(len(csoAls)):
+                ca = CursoAlumno.objects.get(pk = csoAls[i])
+                ca.porcAsist = asistencias[i]
+                ca.notaCurso = notas[i]
+
+                #Si checkbox aprobado
+                if request.POST.get('aprobado'+str(ca.id)):
+                    print('aprobado'+str(ca.id))
+                    ca.aprobado = True
+                ca.save()
+                print('**********************************')
+            return render(request, 'CFP/preNotasAsistencia.html', ctxt)
+
+        else:
+            
+            return render(request, 'CFP/preNotasAsistencia.html', ctxt)
+    
+    # Si No es preceptor
+    else:
+        return redirect('home')
+#endregion
+
 #endregion

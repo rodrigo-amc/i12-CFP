@@ -27,7 +27,6 @@ urlpatterns = [
     path('preCursoNuevo', views.preCursoNuevo, name='preCursoNuevo'),
     path('preCursoEditar/<int:idCurso>', views.preCursoEditar, name='preCursoEditar'),
     path('preLstAlu', views.preLstAlu, name='preLstAlu'),
-    path('preVerAlumno/<int:aluID>', views.preVerAlumno, name='preVerAlumno')
-
-
+    path('preVerAlumno/<int:aluID>', views.preVerAlumno, name='preVerAlumno'),
+    path('preNotAsi/<int:cId>', views.preNotAsi, name='preNotAsi'),
 ]
