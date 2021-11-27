@@ -340,12 +340,41 @@ def cursoNuevo(request):
 
 @login_required
 def cursoLista(request):
-    
-    ctxt = {
-        'cursos' : Curso.objects.all()
-    }
-    
-    return render(request, 'CFP/cursos.html', ctxt)
+    if request.user.is_superuser:    
+        cursos = Curso.objects.all().order_by('-cenForm')
+        csoal = CursoAlumno.objects.all()
+
+
+        ctxt = {
+            'cursos' : cursos,
+            'titulo': 'Listado De cursos'
+        }
+        
+        """ for c in cursos:
+            print('----------------------------')
+            print('CFP: {0}'.format(c.cenForm))
+            print('Curso: {0}'.format(c))
+            for ca in csoal:
+                if ca.curso == c:
+                    print('Alumno: {0}'.format(ca.alumno))
+                    print('********* FIN *********') """
+        
+        """ for c in cursos:
+            als =c.alumno_set.all()
+            print('---------------------------------')
+            print('Curso: {0}'.format(c))
+            print(als)
+            for a in als:
+                csoal = a.cursoalumno_set.all().filter(curso = c)
+                print(csoal)
+            aprobados = c.cursoalumno_set.filter(aprobado=True)
+            print('Curso: {0}'.format(c.id))
+            print('Aprobados: {0}'.format(len(aprobados)))
+            print('------------------------------------') """
+
+        return render(request, 'CFP/cursos.html', ctxt)
+    else:
+        return redirect('home')
 
 
 
@@ -437,8 +466,6 @@ def inscCurso(request, cId):
             curso = cur
         )
         insc.save()
-        cur.cantAl+=1
-        cur.save()
         return redirect('home')
     else:
         return HttpResponse('no es alumno')
@@ -693,7 +720,7 @@ def preNotAsi(request, cId):
     '''Controlador para asignar notas y asistencias del curso'''
     if request.user.es_preceptor:
         
-        # Obtengo el cfp al que pertenece el preceptor
+        # Obtengo el usuario logueado
         usr = request.user
 
         #Ontengo el curso seleccionado en template

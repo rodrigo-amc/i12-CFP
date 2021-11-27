@@ -1,7 +1,11 @@
 {% extends 'Usuarios/menuAdmin.html' %}
 
 {% block Contenido %}
-    <h3>listado de cursos</h3>
+
+    {% comment %}
+    <a class="btn btn-success mb-4" href="{% url 'cursoNuevo' %}">Curso Nuevo</a>
+    
+    
     {% for curso in cursos %}
         <p>
             <span> {{curso.cenForm}} |</span>
@@ -10,5 +14,74 @@
             <a href="" class="btn btn-danger">Borrar</a>
         </p>
     {% endfor %}
+    {% endcomment %}
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col" class="text-center">CFP</th>
+                <th scope="col" class="text-center">Localidad</th>
+                <th scope="col" class="text-center">Curso</th>
+                <th scope="col" class="text-center">Inscripcion</th>
+                <th scope="col" class="text-center">Habilitado</th>
+                <th scope="col" class="text-center">Practico</th>
+                <th scope="col" class="text-center">Modulos</th>
+                <th scope="col" class="text-center">Cupo Maximo</th>
+                <th scope="col" class="text-center">Cupo Minimo</th>
+                <th scope="col" class="text-center">Inicia</th>
+                <th scope="col" class="text-center">Finaliza</th>
+                <th scope="col" class="text-center">Alumnos</th>
+                <th scope="col" class="text-center">Alumnos Aprobados</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for c in cursos %}
+                <tr>
+                    <td>{{c.cenForm}}</td>
+                    
+                    <td>{{c.cenForm.localidad}}</td>
+
+                    <td>{{c}}</td>
+                    
+
+                    {% if c.inscAbierta %}
+                        <td>Abierta</td>
+                    {% else %}
+                        <td>Cerrada</td>
+                    {% endif %}
+
+
+                    
+                    {% if c.habilitado %}
+                        <td class="text-center">Si</td>
+                    {% else %}
+                        <td>No</td>
+                    {% endif %}
+
+
+
+                    
+                    {% if c.practico %}
+                        <td class="text-center">Si</td>
+                    {% else %}
+                        <td class="text-center">No</td>
+                    {% endif %}
+
+                    
+                    <td class="text-center">{{c.cantHoras}}</td>
+                    <td class="text-center">{{c.cupoMax}}</td>
+                    <td class="text-center">{{c.cupoMin}}</td>
+                    <td class="text-center">{{c.fechaInicio | date:"SHORT_DATE_FORMAT" }}</td>
+                    <td class="text-center">{{c.fechaFin | date:"SHORT_DATE_FORMAT" }}</td>
+
+                    <td class="text-center">{{c.alumno_set.all | length}}</td>
+                    <td class="text-center">{{c.get_aprobado | length}}</td>
+                        
+                </tr>
+            {% endfor %}
+                
+        </tbody>
+    </table>
         
 {% endblock Contenido %}

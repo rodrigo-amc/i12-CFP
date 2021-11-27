@@ -43,7 +43,6 @@ class Curso(models.Model):
     fechaInicio = models.DateField()
     fechaFin = models.DateField()
     diasHorarios = models.ManyToManyField(diaHora)
-    cantAl = models.PositiveIntegerField(default=0, blank=True, null=True)
     
     #region Evitar Error De Referencia Circular
     # https://stackoverflow.com/questions/28868610/django-importerror-cannot-import-model#28869260
@@ -59,4 +58,10 @@ class Curso(models.Model):
     def __str__(self):
         return self.nombre
 
+    def get_alumnos(self):
+        alumnos = self.cursoalumno_set.all()
+        return alumnos
 
+    def get_aprobado(self):
+        aprobados = self.cursoalumno_set.filter(aprobado = True)
+        return aprobados

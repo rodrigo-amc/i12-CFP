@@ -52,7 +52,7 @@
                         <li class="list-group-item">Duracion: {{c.cantHoras}} horas</li>
                         <li class="list-group-item">Cupo Minimo: {{c.cupoMin}}</li>
                         <li class="list-group-item">Cupo Maximo: {{c.cupoMax}}</li>
-                        <li class="list-group-item">Inscriptos: {{c.cantAl}}</li>
+                        <li class="list-group-item">Inscriptos: {{c.get_alumnos | length}}</li>
                         <li class="list-group-item">Inicia: {{c.fechaInicio}} </li>
                         <li class="list-group-item">Finaliza: {{c.fechaFin}} </li>
                     </ul>
