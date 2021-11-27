@@ -333,14 +333,27 @@ def cursoNuevo(request):
 
 @login_required
 def cursoLista(request):
+    if request.user.is_superuser:
+        cursos = Curso.objects.all().order_by('-cenForm')
+        ctx = {
+            'cursos': cursos,
+            'titulo': 'Listado De Cursos'
+        }
+        return render(request, 'CFP/cursosCRUD.html', ctx)
+    else:
+        return redirect('home')
+
+
+
+@login_required
+def cursoInfo(request):
     if request.user.is_superuser:    
         cursos = Curso.objects.all().order_by('-cenForm')
-        csoal = CursoAlumno.objects.all()
 
 
         ctxt = {
             'cursos' : cursos,
-            'titulo': 'Listado De cursos'
+            'titulo': 'Informe De Cursos'
         }
         
         """ for c in cursos:
@@ -365,7 +378,7 @@ def cursoLista(request):
             print('Aprobados: {0}'.format(len(aprobados)))
             print('------------------------------------') """
 
-        return render(request, 'CFP/cursos.html', ctxt)
+        return render(request, 'CFP/cursosInforme.html', ctxt)
     else:
         return redirect('home')
 

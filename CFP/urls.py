@@ -18,6 +18,7 @@ urlpatterns = [
     #Cursos
     path('cursoNuevo', views.cursoNuevo, name='cursoNuevo'),
     path('cursos', views.cursoLista, name='cursos'),
+    path('cursosInfo', views.cursoInfo, name='cursosInfo'),
     path('cursoEditar/<int:idCurso>', views.cursoEditar, name='cursoEditar'),
     path('inscCurso/<int:cId>', views.inscCurso, name='inscCurso'),
 
