@@ -14,7 +14,6 @@ urlpatterns = [
     path('centroNuevo', views.centroNuevo, name='centroNuevo'),
     path('centros', views.centros, name='centros'),
     path('centrosEditar/<int:idCentro>', views.centroEditar, name='centrosEditar'),
-    path('centrosBorrar/<int:idCentro>', views.centroBorrar, name='centrosBorrar'),
 
     #Cursos
     path('cursoNuevo', views.cursoNuevo, name='cursoNuevo'),

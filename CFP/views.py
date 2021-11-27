@@ -258,13 +258,6 @@ def centroEditar(request, idCentro):
         
         return redirect('/centros')
 
-
-
-@login_required
-def centroBorrar(request, idCentro):
-    cenBorrar = CentroDeFormacion.objects.get(pk=idCentro)
-    cenBorrar.delete()
-    return redirect('/centros')
 #endregion Centros De Formacion
 
 

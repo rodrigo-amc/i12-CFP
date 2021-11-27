@@ -2,12 +2,31 @@
 
 {% block Contenido %}
     
-    {% for centro in centros %}
-        <p>
-            {{centro}}
-            <a href="{% url 'centrosEditar' centro.id %}" class="btn btn-warning">Editar</a>
-            <a href="{% url 'centrosBorrar' centro.id %}" class="btn btn-danger">Borrar</a>
-        </p>
-    {% endfor %}
+    <a href="{% url 'centroNuevo' %}" class="btn btn-success btn-sm mb-4">Nuevo Centro</a>
+
+    <table class="table table-hover">
+        <thead>
+            <th>Centro De Formacion</th>
+            <th>Localidad</th>
+            <th>Domicilio</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </thead>
+        <tbody>
+            
+            {% for centro in centros %}
+                <tr>
+                    <td>{{centro}}</td>
+                    <td>{{centro.localidad}}</td>
+                    <td>{{centro.domicilio}}</td>
+                    <td>{{centro.email}}</td>
+                    <td>
+                        <a href="{% url 'centrosEditar' centro.id %}" class="btn btn-warning btn-sm">Editar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+                
+        </tbody>
+    </table>
         
 {% endblock Contenido %}
