@@ -13,7 +13,7 @@
                 <div class="card mb-3 shadow">
                     <div class="card-header">
                         <div class="text-center font-weight-bold" style="height: 130px">
-                            <span class="h3 font-weight-bold">{{c.nombre | title}}</span>
+                            <span class="h4 font-weight-bold">{{c.nombre | title}}</span>
                         </div>
                     </div>
                     
@@ -31,7 +31,7 @@
                         {% endif %}
 
                         <a href="{% url 'preCursoEditar' c.id %}" class="btn btn-warning btn-block btn-sm">Editar Datos De Curso</a>
-                        <a href="{% url 'preNotAsi' c.id %}" class="btn btn-success btn-block btn-sm">Notas Y Asistencias</a>
+                        <a href="{% url 'preNotAsi' c.id %}" class="btn btn-info btn-block btn-sm">Notas Y Asistencias</a>
                         
                         {% if not c.habilitado %}
                         <p class="text-center p-2 mb-0 font-weight-bold ">Deshabilitado</p>
@@ -50,8 +50,24 @@
                             
                         
                         <li class="list-group-item">Duracion: {{c.cantHoras}} horas</li>
-                        <li class="list-group-item">Cupo Minimo: {{c.cupoMin}}</li>
-                        <li class="list-group-item">Cupo Maximo: {{c.cupoMax}}</li>
+                        
+                        
+                        {% if c.get_alumnos.count == c.cupoMin %}
+                            <li class="list-group-item bg-success"><b>Cupo Minimo</b>: {{c.cupoMin}}</li>
+                        {% else %}
+                            <li class="list-group-item">Cupo Minimo: {{c.cupoMin}}</li>
+                        {% endif %}
+                        
+                        
+                        {#Cupo Maximo#}
+                        {% if c.get_alumnos.count == c.cupoMax %}
+                            <li class="list-group-item bg-danger"><b>Cupo Maximo</b>: {{c.cupoMax}}</li>
+                        {% else %}
+                            <li class="list-group-item">Cupo Maximo: {{c.cupoMax}}</li>
+                        {% endif %}
+
+
+
                         <li class="list-group-item">Inscriptos: {{c.get_alumnos | length}}</li>
                         <li class="list-group-item">Inicia: {{c.fechaInicio}} </li>
                         <li class="list-group-item">Finaliza: {{c.fechaFin}} </li>
