@@ -2,7 +2,21 @@
 
 
 {% block Contenido %}
-        
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <p class="text-center">
+                <strong>{{message}}</strong>
+            </p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
 <div class="container-fluid">
     <div class="row mt-4">
         
@@ -76,7 +90,15 @@
                                 <li class="list-group-item">{{da}} de {{da.horaInicio}} a {{da.horaFin}} </li>
                             {% endfor %}
                         </ul>
-                        
+                        <form action="{% url 'bajaCurso' ca.id %}"
+                              method="POST"
+                              class="d-inline frmBaja"
+                              name="{{ca.curso}}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-block btn-sm" id="inscribir">
+                                Dar De Baja La Inscripcion
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -86,4 +108,46 @@
 </div>    
 
 {% endblock Contenido %}
+
+
+{% block jquery %}
+<script>
+            
+    $(document).ready(function(){
+
+        $(".frmBaja").submit(function(e){
+            e.preventDefault(e);
+            var ruta = $(this).attr('action');
+            var curso = $(this).attr('name')
+
+            //Acá uso el plugin "JQUERY-CONFIRM"
+            $.confirm({
+                theme: 'bootstrap',
+                title: curso,
+                content: 'Dar De Baja La Inscripcion?. Esta Acción No Se Puede Revertir',
+                buttons: {
+                    //Primer boton
+                    danger:{
+                        text:'Dar De Baja',
+                        btnClass:' btn-danger btn-block',
+                        action: function(){
+                            window.location.href=ruta;
+                        }
+                    },
+                    //Segundo boton
+                    info:{
+                        text: 'Cancelar',
+                        btnClass: 'btn-info btn-block',
+                        action: function(){
+                            this.close();
+                        }
+                    }
+                }
+            });
+        });
+
+    });
+
+</script>
+{% endblock jquery %}
     

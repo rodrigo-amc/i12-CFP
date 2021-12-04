@@ -459,7 +459,8 @@ def adminInfoAlumnos(request):
         return render(request, 'CFP/alumnosLst.html', ctxt)
 
 
-#Alumno
+
+#region Alumno
 @login_required
 def misCursos(request):
     #region LEEME CursoAlumno
@@ -497,7 +498,6 @@ def misCursos(request):
 
 
 
-#Alumno
 @login_required
 def inscCurso(request, cId):
     if request.user.es_alumno:
@@ -512,6 +512,16 @@ def inscCurso(request, cId):
         return redirect('home')
     else:
         return HttpResponse('no es alumno')
+
+
+@login_required
+def bajaCurso(request, caID):
+    if request.user.es_alumno:
+        ca = CursoAlumno.objects.get(pk=caID)
+        messages.success(request, 'Te Diste De Baja Del Curso: {}'.format(ca.curso))
+        ca.delete()
+        return redirect('misCursos')
+#endregion
 
 
 

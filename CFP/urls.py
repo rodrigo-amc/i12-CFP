@@ -21,6 +21,7 @@ urlpatterns = [
     path('cursosInfo', views.cursoInfo, name='cursosInfo'),
     path('cursoEditar/<int:idCurso>', views.cursoEditar, name='cursoEditar'),
     path('inscCurso/<int:cId>', views.inscCurso, name='inscCurso'),
+    path('bajaCurso/<int:caID>', views.bajaCurso, name='bajaCurso'),
 
     #Admin Info Alumnos
     path('InformeDeAlumnos', views.adminInfoAlumnos, name='adminInfoAlumnos'),
