@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="{% static 'CFP/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'CFP/css/home.css' %}">
 
+    <!--jquery-confirm css. Para crear alerts y confirm jquery con estilos css. Abajo está el js-->
+    <!-- https://craftpip.github.io/jquery-confirm/ -->
+    <link type="text/css" rel="stylesheet" href="{% static 'CFP/css/jquery-confirm.css' %}">
+
 </head>
 <body>
     <section class="container mt-4 mb-4">
@@ -107,12 +111,12 @@
     <script src=" {% static 'CFP/js/popper.min.js' %} "></script>
     <script src=" {% static 'CFP/js/bootstrap.min.js' %} "></script>
     <script src="{% static 'CFP/js/universal-parallax.min.js' %}"></script>
-
+    
+    <!--plugin para alerts de javascript (jquery) con estilos css y funciones varias-->
+    <script src="{% static 'CFP/js/jquery-confirm.js' %}"></script>
     
     {% block jquery %}
-        <script>
-            new universalParallax().init();
-        </script>        
+                
     {% endblock jquery %}
         
 </body>

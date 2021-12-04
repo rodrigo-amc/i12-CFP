@@ -2,6 +2,24 @@
 
 
 {% block Contenido %}
+
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <p class="text-center">
+                <strong>{{message}}</strong>
+            </p>
+            <p class="text-center">
+                Accedé a <a href="{% url 'misCursos' %}">Mis Cursos</a> Para Ver Los Detalles 
+            </p>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+{% endif %}
+
 <div class="container-fluid">
     {% for loc in localidades %}
         <p><h3>{{loc}}</h3></p>
@@ -51,9 +69,12 @@
                                         {% if cso in alumno.curso.all %}
                                             INSCRIPTO
                                         {% else %}
-                                            <p class="text-center">
-                                                <a href="{% url 'inscCurso' cso.id %}" class="btn btn-success btn-block p-1">Inscribirse</a>
-                                            </p>
+                                            <form action="{% url 'inscCurso' cso.id %}" method="POST" class="d-inline frmInsc" name="{{cso.nombre}}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-success btn-block btn-sm" id="inscribir">
+                                                    Inscribirse
+                                                </button>
+                                            </form>
                                         {% endif %}
                                             
                                     {% else %}
@@ -82,4 +103,46 @@
         
 </div> {# FIN CONTAINER PARA LISTADO DE CURSOS#}
 {% endblock Contenido %}
+    
+
+{% block jquery %}
+<script>
+            
+    $(document).ready(function(){
+
+        $(".frmInsc").submit(function(e){
+            e.preventDefault(e);
+            var ruta = $(this).attr('action');
+            var curso = $(this).attr('name')
+
+            //Acá uso el plugin "JQUERY-CONFIRM"
+            $.confirm({
+                theme: 'bootstrap',
+                title: curso,
+                content: 'Inscribirse Al Curso?',
+                buttons: {
+                    //Primer boton
+                    danger:{
+                        text:'Inscribirse',
+                        btnClass:' btn-success btn-block',
+                        action: function(){
+                            window.location.href=ruta;
+                        }
+                    },
+                    //Segundo boton
+                    info:{
+                        text: 'Cancelar',
+                        btnClass: 'btn-info btn-block',
+                        action: function(){
+                            this.close();
+                        }
+                    }
+                }
+            });
+        });
+
+    });
+
+</script>
+{% endblock jquery %}
     

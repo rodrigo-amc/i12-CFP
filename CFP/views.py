@@ -508,6 +508,7 @@ def inscCurso(request, cId):
             curso = cur
         )
         insc.save()
+        messages.success(request, 'Te Inscribiste Al Curso {0}'.format(cur))
         return redirect('home')
     else:
         return HttpResponse('no es alumno')
