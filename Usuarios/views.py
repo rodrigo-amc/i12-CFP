@@ -141,6 +141,19 @@ def crearAlumno(request):
 
     else:
         return render(request, 'Usuarios/formAlumno.html', ctxtGET)
+
+
+
+@login_required
+def borrarAlumno(request, aID):
+    if request.user.is_superuser:
+        alumno = Alumno.objects.get(pk=aID)
+        usr = appUser.objects.get(pk=aID)
+
+        alumno.delete()
+        usr.delete()
+
+        return redirect('adminInfoAlumnos')
 #endregion
 
 

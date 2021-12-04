@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from CFP.forms import frmCentroFormacion, frmCursos, preFrmCursos, frmLocalidad
 from django.contrib import messages
 
-from Usuarios.models import Alumno, CursoAlumno, Profesor
+from Usuarios.models import Alumno, CursoAlumno, Profesor, appUser
 from .models import CentroDeFormacion, Curso, Localidad
 # Create your views here.
 
@@ -70,43 +70,6 @@ def home(request):
         
     }
     return render(request, 'CFP/homePrincipal.html', ctxtHome)
-
-
-
-@login_required
-def misCursos(request):
-    #region LEEME CursoAlumno
-    # En el template accedo a los cursos del alumno a traves
-    # del modelo de relacion N a N "CursoAlumno". "curso" es
-    # un campo en el modelo "Alumno" que establece la relacion
-    # N a N entre "Alumno" y "Curso" a traves del modelo
-    # "AlumnoCurso". Como el campo de la relacion se
-    # establece en "Alummno", solo puedo acceder a
-    # este desde "Alumno" y no desde "Curso"
-    # (Ver modelos para entender)
-    # Lo hago asi para poder acceder a los campos de "AlumnoCurso"
-    # porcAsist, notaCurso y aprobado
-    #endregion
-    
-    user = request.user
-    
-    if user.es_alumno:
-        alumno = Alumno.objects.get(pk=request.user.id)
-
-        aluCtxt={
-            'usuario' : user,
-            'alumno' : alumno,
-            'titulo' : 'Menu Alumno',
-            'miscursos':'Todos Los Cursos'
-        }
-        
-        # miscursos
-        # paso la variable para levantarla en el header que hereda
-        # el template#
-
-        return render(request, 'CFP/homeAlumno.html', aluCtxt)
-    else:
-        return redirect('home')
 
 
 
@@ -462,6 +425,79 @@ def cursoEditar(request, idCurso):
 
 
 
+@login_required
+def adminInfoAlumnos(request):
+    if request.user.is_superuser:
+        
+        inscriptos = []
+        sinCurso = []
+        alumnos = Alumno.objects.all()
+
+        for a in alumnos:
+            if (a not in inscriptos) and (a not in sinCurso):
+                
+                if len(a.cursoalumno_set.all()) != 0 :
+                    inscriptos.append(a)
+                else:
+                    sinCurso.append(a)
+
+
+        for i in inscriptos:
+            print(i.usr_alumno.last_name)
+        
+        print('{0} Sin Curso {0}'.format('---------------'))
+        for s in sinCurso:
+            print(s.usr_alumno.last_name)
+
+
+        ctxt = {
+            'cursando': inscriptos,
+            'sincurso': sinCurso,
+            'titulo': "Informe De Alumnos"
+        }
+
+        return render(request, 'CFP/alumnosLst.html', ctxt)
+
+
+#Alumno
+@login_required
+def misCursos(request):
+    #region LEEME CursoAlumno
+    # En el template accedo a los cursos del alumno a traves
+    # del modelo de relacion N a N "CursoAlumno". "curso" es
+    # un campo en el modelo "Alumno" que establece la relacion
+    # N a N entre "Alumno" y "Curso" a traves del modelo
+    # "AlumnoCurso". Como el campo de la relacion se
+    # establece en "Alummno", solo puedo acceder a
+    # este desde "Alumno" y no desde "Curso"
+    # (Ver modelos para entender)
+    # Lo hago asi para poder acceder a los campos de "AlumnoCurso"
+    # porcAsist, notaCurso y aprobado
+    #endregion
+    
+    user = request.user
+    
+    if user.es_alumno:
+        alumno = Alumno.objects.get(pk=request.user.id)
+
+        aluCtxt={
+            'usuario' : user,
+            'alumno' : alumno,
+            'titulo' : 'Menu Alumno',
+            'miscursos':'Todos Los Cursos'
+        }
+        
+        # miscursos
+        # paso la variable para levantarla en el header que hereda
+        # el template#
+
+        return render(request, 'CFP/homeAlumno.html', aluCtxt)
+    else:
+        return redirect('home')
+
+
+
+#Alumno
 @login_required
 def inscCurso(request, cId):
     if request.user.es_alumno:

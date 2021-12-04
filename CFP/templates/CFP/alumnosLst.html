@@ -1,0 +1,137 @@
+{% extends 'Usuarios/menuAdmin.html' %}
+
+
+{% block Contenido %}  
+
+    <a href="#alumnosCurso"
+       data-toggle="collapse"
+       class="btn btn-primary btn-block btn-sm"
+       role="button"
+       aria-expanded="false"
+       title="Click Para Mostrar Lista"
+    >
+        <h3>Alumnos Inscriptos A Cursos</h3>
+    </a>
+
+    
+    
+    <table class="table table-hover collapse" id="alumnosCurso">
+        <thead>
+            <tr>
+                <th>Apellido</th>
+                <th>Nombre</th>
+                <th>DNI</th>
+                <th>Curso</th>
+                <th>Centro De Formacion</th>
+                <th>Localidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alumno in cursando %}
+        
+                {% for curso in alumno.cursoalumno_set.all %}
+                    <tr>
+                        <td>{{alumno.usr_alumno.last_name}}</td>
+                        <td>{{alumno.usr_alumno.first_name}}</td>
+                        <td>{{alumno.Dni}}</td>
+                        <td>{{curso.curso.nombre | title}}</td>
+                        <td>{{curso.curso.cenForm | title}}</td>
+                        <td>{{curso.curso.cenForm.localidad | title}}</td>
+                    </tr>
+                {% endfor %}
+                    
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+
+    <a href="#alumnosSinCurso"
+       data-toggle="collapse"
+       class="btn btn-primary btn-block btn-sm mb-4"
+       role="button"
+       aria-expanded="false"
+       title="Click Para Mostrar Lista"
+    >
+        <h3>Alumnos Sin Curso Asignado</h3>
+    </a>
+    
+    <table class="table table-hover collapse mt-4" id="alumnosSinCurso">
+        <thead>
+            <th>Apellido</th>
+            <th>Nombre</th>
+            <th>DNI</th>
+            <th>Fecha De Registro</th>
+            <th>Ultimo Ingreso</th>
+            <th>Acciones</th>
+        </thead>
+        <tbody>
+            {% for alSc in sincurso %}
+                <tr>
+                    <td>{{alSc.usr_alumno.last_name}}</td>
+                    <td>{{alSc.usr_alumno.first_name}}</td>
+                    <td>{{alSc.Dni}}</td>
+                    <td>{{alSc.usr_alumno.date_joined | date:"SHORT_DATE_FORMAT" }}</td>
+                    
+                    {% if alSc.usr_alumno.last_login %}
+                        <td>{{alSc.usr_alumno.last_login | date:"SHORT_DATE_FORMAT" }}</td>
+                    {% else %}
+                        <td>Nunca</td>
+                    {% endif %}
+
+                    <td>
+                        <form action="{% url 'borrarAlumno' alSc.usr_alumno_id %}" method="POST" class="d-inline frmBorrar">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm" id="borrar">
+                                Borrar Alumno
+                            </button>
+                        </form>
+                    </td>
+                        
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock Contenido %}
+
+
+{% block jquery %}
+<script>
+        
+    $(document).ready(function(){
+
+        $(".frmBorrar").submit(function(e){
+            e.preventDefault(e);
+            var ruta = $(this).attr('action');
+
+            //Acá uso el plugin "JQUERY-CONFIRM"
+            $.confirm({
+                theme: 'bootstrap',
+                title: 'BORRAR ALUMNO!',
+                content: 'Esta Acción No Se Puede Revertir. Desea Continuar?',
+                buttons: {
+                    //Primer boton
+                    danger:{
+                        text:'SI',
+                        btnClass:' btn-danger ',
+                        action: function(){
+                            window.location.href=ruta;
+                        }
+                    },
+                    //Segundo boton
+                    info:{
+                        text: 'No',
+                        btnClass: 'btn-info',
+                        action: function(){
+                            this.close();
+                        }
+                    }
+                }
+            });
+        });
+
+    });
+</script>
+{% endblock jquery %}
+    

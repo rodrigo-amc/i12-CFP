@@ -8,7 +8,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.logIn, name='login'),
     path('menu', views.menu, name='menu'),
-    path('crearAlumno', views.crearAlumno, name='crearAlumno'),
 
     #Profesores
     path('profesores', views.lstProfesores, name='profesores'),
@@ -20,7 +19,11 @@ urlpatterns = [
     path('preceptores', views.lstPreceptores, name='preceptores'),
     path('crearPreceptor', views.crearPreceptor, name='crearPreceptor'),
     path('editPrec/<idUsr>', views.editarPreceptor, name='editPrec'),
-    path('deshabPrec/<idUsr>', views.deshabilitarPreceptor, name='deshabPrec')
+    path('deshabPrec/<idUsr>', views.deshabilitarPreceptor, name='deshabPrec'),
+
+    #Alumno
+    path('crearAlumno', views.crearAlumno, name='crearAlumno'),
+    path('borrarAlumno/<int:aID>', views.borrarAlumno, name='borrarAlumno')
 ]
 
 # Ruta para las imagenes
