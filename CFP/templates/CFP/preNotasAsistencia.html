@@ -3,6 +3,17 @@
 
 {% block Contenido %}
 
+{% for message in messages %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <p class="text-center">
+            <strong>{{message}}</strong>
+        </p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endfor %}
+    
     <form action="" method="POST" autocomplete="off" class="mt-5">
         {% csrf_token %}
 
@@ -36,17 +47,17 @@
                             
                             {# Porcentaje De Asistencia #}
                             <td>
-                                <input class="form-control" type="number" name="asistCurso" id="{{ca.id}}" value="{{ca.porcAsist}}" max="100">
+                                <input class="form-control" type="number" name="asistCurso" id="asis{{ca.id}}" value="{{ca.porcAsist}}" max="100">
                             </td>
                             
                             {# Nota Del Curso #}
                             <td>
-                                <input class="form-control" type="number" name="notaCurso" id="" value="{{ca.notaCurso}}" max="10">
+                                <input class="form-control" type="number" name="notaCurso" id="nota{{ca.id}}" value="{{ca.notaCurso}}" max="10">
                             </td>
 
                             {# Checkbox para valor "Aprobado" #}
                             <td>
-                                <input class="form-check-input ml-4" type="checkbox" name="aprobado{{ca.id}}">
+                                <input class="form-check-input ml-4 checks" type="checkbox" name="aprobado{{ca.id}}">
                             </td>
                         </tr>
                     {% endif %}
@@ -65,5 +76,41 @@
 
 
 {% block jquery %}
-    
+    <script>
+        //Creo un array con todos los checkboxes
+        //En el selector uso " ^ " porque no todos tienen el mismo nombre
+        //De ese modo capturo todo lo que empiece con "aprobado"
+        /* var aprobados = $('input[name^="aprobado"]')
+        //console.log(aprobados.length)
+        
+        //Por cada elemento del array, cada checkbox
+        $(aprobados).each(function(){
+            
+            //Si el checkbox es "tildado"
+            if ($(this).is(":checked")){
+                console.log('checked: '+$(this).val())
+            }
+        }) */
+
+        //Cada vez que un checkbox es tildado
+/*         $('.checks').change(function(){
+            
+            //Creo un array con todos los checkboxes
+            //En el selector uso " ^ " porque no todos tienen el mismo nombre
+            //De ese modo capturo todo lo que empiece con "aprobado"
+            var aprobados = $('input[name^="aprobado"]')
+            //console.clear()
+            //console.log(aprobados.length)
+            
+            //Por cada elemento del array, cada checkbox
+            $(aprobados).each(function(){
+                
+                //Si el checkbox es "tildado"
+                if ($(this).is(":checked")){
+                    console.log('checked: '+$(this).val())
+                }
+            })  
+            
+        }) */
+    </script>
 {% endblock jquery %}

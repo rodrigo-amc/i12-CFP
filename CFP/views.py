@@ -806,15 +806,24 @@ def preNotAsi(request, cId):
 
             for i in range(len(csoAls)):
                 ca = CursoAlumno.objects.get(pk = csoAls[i])
-                ca.porcAsist = asistencias[i]
-                ca.notaCurso = notas[i]
+                if asistencias[i] != "":
+                    ca.porcAsist = asistencias[i]
+                if notas[i] != "":
+                    ca.notaCurso = notas[i]
 
                 #Si checkbox aprobado
                 if request.POST.get('aprobado'+str(ca.id)):
                     print('aprobado'+str(ca.id))
-                    ca.aprobado = True
+                    if (asistencias[i] != "") and notas[i] != "":
+                        if (float(asistencias[i]) >= float(80.0)) and (int(notas[i]) >= 7):
+                            ca.aprobado = True
+                        else:
+                            messages.error(request,
+                            'Alulmno {0}. No se puede aprobar alumnos con Asistencia menor a 80% y Nota menor a 7'
+                            .format(ca.alumno.usr_alumno.last_name))
+
                 ca.save()
-                print('**********************************')
+                
             return render(request, 'CFP/preNotasAsistencia.html', ctxt)
 
         else:
