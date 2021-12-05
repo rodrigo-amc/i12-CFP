@@ -24,7 +24,9 @@ class diaHora(models.Model):
 class CentroDeFormacion(models.Model):
     nombre = CharField(max_length=20)
     localidad = models.ForeignKey(Localidad, on_delete=DO_NOTHING)
-    domicilio = models.CharField(max_length=150)
+    calle = models.CharField(max_length=150)
+    altura = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    entre = models.CharField(max_length=200)
     email = models.EmailField()
 
     def __str__(self):

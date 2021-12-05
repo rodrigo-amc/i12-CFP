@@ -37,7 +37,7 @@ class Alumno(models.Model):
     #email= es el campo "email" de AbstractUser
     #OJO edité "AbstractUser" (/django/contrib/auth/models.py) para que el campo email sea único
     calle = models.CharField(max_length=100)
-    altura = models.PositiveIntegerField()
+    altura = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     entre = models.CharField(max_length=200)
 
     localidad = models.ForeignKey(Localidad, on_delete=DO_NOTHING)
