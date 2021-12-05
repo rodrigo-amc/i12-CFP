@@ -16,8 +16,10 @@ class frmAlumno(forms.ModelForm):
             'fecha_nacimiento',
             'DniImg',
             'Autorizacion',
+            'calle',
+            'altura',
+            'entre',
             'Telefono',
-            'Domicilio',
             'localidad',
         ]
 

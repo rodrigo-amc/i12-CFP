@@ -87,7 +87,11 @@ def crearAlumno(request):
 
             autoriza = request.FILES.get('Autorizacion')
             tel = request.POST.get('Telefono')
-            domc = request.POST.get('Domicilio')
+            calle = request.POST.get('calle')
+            altura = request.POST.get('altura')
+            entre = request.POST.get('entre')
+
+
             loc = request.POST.get('localidad')
             #endregion
             #print(type(dni_img))
@@ -113,7 +117,9 @@ def crearAlumno(request):
                 DniImg = dni_img,
                 Autorizacion = autoriza,
                 Telefono = tel,
-                Domicilio = domc,
+                calle = calle,
+                altura = altura,
+                entre = entre,
                 localidad = Localidad.objects.get(pk=loc)
             )
             alumno.save()
