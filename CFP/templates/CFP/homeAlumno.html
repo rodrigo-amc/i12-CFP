@@ -5,14 +5,28 @@
 
 {% if messages %}
     {% for message in messages %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <p class="text-center">
-                <strong>{{message}}</strong>
-            </p>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+        {# 40 es el codigo para un mensaje de tipo ERROR #}
+        {# Me doy cuenta imprimiendo {{message.level}} #}
+        
+        {% comment %}
+            DEBUG 10
+            INFO 20
+            SUCCESS 25
+            WARNING 30
+            ERROR 40
+        {% endcomment %}
+            
+        {% if message.level == 40 %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <p class="text-center">
+                    <strong>{{message}}</strong>
+                </p>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+            
     {% endfor %}
 {% endif %}
 

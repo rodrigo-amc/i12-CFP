@@ -518,7 +518,7 @@ def inscCurso(request, cId):
 def bajaCurso(request, caID):
     if request.user.es_alumno:
         ca = CursoAlumno.objects.get(pk=caID)
-        messages.success(request, 'Te Diste De Baja Del Curso: {}'.format(ca.curso))
+        messages.error(request, 'Te Diste De Baja Del Curso: {}'.format(ca.curso))
         ca.delete()
         return redirect('misCursos')
 #endregion
