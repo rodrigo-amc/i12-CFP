@@ -5,7 +5,7 @@
 
     {% load crispy_forms_tags %}
     
-    <form action="" method="post" autocomplete="off" class="m-4">
+    <form action="" method="post" id="frmCrear" autocomplete="off" class="m-4">
         {% csrf_token %}
         {{form | crispy}}
 
@@ -116,7 +116,8 @@
                     $('.'+claseTime+'F').prop("disabled", true);
                     
                     //Borro el valor que tiene el input "time"
-                    $('.'+claseTime).val("")
+                    $('.'+claseTime+'I').val("");
+                    $('.'+claseTime+'F').val("");
                     
                 }
 
@@ -203,11 +204,31 @@
 
             //Si el array "vacios" no tiene elementos
             if (vacios.length == 0){
-                //alert('enviado')
+                
+                //Fecha Actual
+                var fechaActual = new Date();
+                
+                //Tomo el valor de Fecha De Inicio
+                var valFechaInic = $('#id_fechaInicio').val();
+                
+                //Concateno a "valFechaInic" hh:mm:ss para poder convertir a Date()
+                var valFechaCompleto = valFechaInic+"T00:00:00";
 
-                //Envio el formulario
-                $('#frmEdit').submit()
-                //alert('Sin Vacios')
+                //Convierto "valFechaCompleto" a tipo Date()
+                var fechaInputDate = new Date(valFechaCompleto);
+
+                var fIni = $('#id_fechaInicio').val()
+                var fFin = $('#id_fechaFin').val()
+                                
+                if (fechaInputDate < fechaActual){
+                    alert('La Fecha De Inicio No Puede Ser Anterior A Hoy')
+                }else if (fIni > fFin){
+                    alert('La Fecha De Inicio Debe Ser Anterior A la Fecha De Finalizacion')
+                }else{
+                    //Envio el formulario
+                    $('#frmCrear').submit()
+                }
+                
             }
 
         })
