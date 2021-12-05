@@ -105,8 +105,8 @@
         <p>
             <input type="checkbox" class="dias" id="" name="dias" value="Sabado">
             <label for="dias">Sabado</label>
-            <input type="time" class="SabadoI" name="horaInicio" id="" disabled>
-            <input type="time" class="SabadoF" name="horaFin" id="" disabled>
+            <input type="time" class="SabadoI" name="horaInicio" id="" disabled min="07:00" max="22:00">
+            <input type="time" class="SabadoF" name="horaFin" id="" disabled min="07:00" max="22:00">
             <span class="ml-2" id="Sabado" style="color: red;"></span>
             
         </p>
@@ -208,13 +208,44 @@
                         //Agrego un elemento a la lista vacios
                         vacios.push($(this))
                         console.clear()
-                        console.log(vacios.length)
+                        console.log('Vacios: '+vacios.length)
                         
                         //Le asigno al span un mensaje de error
                         $('#'+clase).append('Completar Valores')
-                        
-                    }
                     
+                    // RANGO DE HORARIOS
+                    //Inicio
+                    }else if (itimeI.val()<"07:00"){
+                        vacios.push($(this))
+                        console.clear()
+                        console.log('iTimeI: '+vacios.length)
+                        $('#'+clase).append('El horario debe ser entre 7am y 10pm ')
+
+                    }else if (itimeI.val()>"22:00"){
+                        vacios.push($(this))
+                        console.clear()
+                        console.log('iTimeI: '+vacios.length)
+                        $('#'+clase).append('El horario debe ser entre 7am y 10pm ')
+                    
+                    //Fin
+                    }else if (itimeF.val()<"07:00"){
+                        vacios.push($(this))
+                        console.clear()
+                        console.log('iTimeF: '+vacios.length)
+                        $('#'+clase).append('El horario debe ser entre 7am y 10pm ')
+
+                    }else if (itimeF.val()>"22:00"){
+                        vacios.push($(this))
+                        console.clear()
+                        console.log('iTimeF: '+vacios.length)
+                        $('#'+clase).append('El horario debe ser entre 7am y 10pm ')
+
+                    }else if (itimeI.val()>itimeF.val()){
+                        vacios.push($(this))
+                        console.clear()
+                        console.log('ALVESRRRE: '+vacios.length)
+                        $('#'+clase).append('El Horario De Inicio Debe Ser Menor Al De Fin ')
+                    }
                 }
                 
             })
@@ -225,9 +256,9 @@
 
                 //Envio el formulario
                 $('#frmEdit').submit()
+                //alert('Sin Vacios')
             }
 
         })
     </script>
 {% endblock jquery %}
-    

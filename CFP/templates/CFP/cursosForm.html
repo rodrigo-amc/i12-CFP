@@ -12,46 +12,57 @@
         <p>
             <input type="checkbox" class="dias" id="lunes" name="dias" value="Lunes">
             <label for="dias">Lunes</label>
-            <input type="time" class="Lunes" name="horaInicio" id="" disabled>
-            <input type="time" class="Lunes" name="horaFin" id="" disabled>
+            <input type="time" class="LunesI" name="horaInicio" id="" disabled>
+            <input type="time" class="LunesF" name="horaFin" id="" disabled>
+            <span class="ml-2" id="Lunes" style="color: red;"></span>
         </p>
 
         <p>
             <input type="checkbox" class="dias" id="" name="dias" value="Martes">
             <label for="dias">Martes</label>
-            <input type="time" class="Martes" name="horaInicio" id="" disabled>
-            <input type="time" class="Martes" name="horaFin" id="" disabled>
+            <input type="time" class="MartesI" name="horaInicio" id="" disabled>
+            <input type="time" class="MartesF" name="horaFin" id="" disabled>
+            <span class="ml-2" id="Martes" style="color: red;"></span>
+            
         </p>
 
         <p>
             <input type="checkbox" class="dias" id="" name="dias" value="Miercoles">
             <label for="dias">Miercoles</label>
-            <input type="time" class="Miercoles" name="horaInicio" id="" disabled>
-            <input type="time" class="Miercoles" name="horaFin" id="" disabled>
+            <input type="time" class="MiercolesI" name="horaInicio" id="" disabled>
+            <input type="time" class="MiercolesF" name="horaFin" id="" disabled>
+            <span class="ml-2" id="Miercoles" style="color: red;"></span>
+            
         </p>
 
         <p>
             <input type="checkbox" class="dias" id="" name="dias" value="Jueves">
             <label for="dias">Jueves</label>
-            <input type="time" class="Jueves" name="horaInicio" id="" disabled>
-            <input type="time" class="Jueves" name="horaFin" id="" disabled>
+            <input type="time" class="JuevesI" name="horaInicio" id="" disabled>
+            <input type="time" class="JuevesF" name="horaFin" id="" disabled>
+            <span class="ml-2" id="Jueves" style="color: red;"></span>
+            
         </p>
 
         <p>
             <input type="checkbox" class="dias" id="" name="dias" value="Viernes">
             <label for="dias">Viernes</label>
-            <input type="time" class="Viernes" name="horaInicio" id="" disabled>
-            <input type="time" class="Viernes" name="horaFin" id="" disabled>
+            <input type="time" class="ViernesI" name="horaInicio" id="" disabled>
+            <input type="time" class="ViernesF" name="horaFin" id="" disabled>
+            <span class="ml-2" id="Viernes" style="color: red;"></span>
+            
         </p>
 
         <p>
             <input type="checkbox" class="dias" id="" name="dias" value="Sabado">
             <label for="dias">Sabado</label>
-            <input type="time" class="Sabado" name="horaInicio" id="" disabled>
-            <input type="time" class="Sabado" name="horaFin" id="" disabled>
+            <input type="time" class="SabadoI" name="horaInicio" id="" disabled min="07:00" max="22:00">
+            <input type="time" class="SabadoF" name="horaFin" id="" disabled min="07:00" max="22:00">
+            <span class="ml-2" id="Sabado" style="color: red;"></span>
+            
         </p>
 
-        <input type="submit" class="btn btn-success" value="Guardar">
+        <input type="submit" id="btnGuardar" class="btn btn-success" value="Guardar">
         <a href="{% url 'cursos' %}" class="btn btn-danger">Cancelar</a>
     </form>
 
@@ -61,7 +72,9 @@
 
 {% block jquery %}
     <script>
+        var Dias = $('input[name="dias"]')
 
+        //Funcionalidad para habilitar la edicion de los inputs tipo time
         //Cuando cambia el estado de un checkbox
         $('.dias').change(function(){
             //pruebas
@@ -89,7 +102,8 @@
                     //alert("Clase: "+clase)
 
                     //Le saco la propiedad "disaabled" a los "time" con esa clase
-                    $('.'+claseTime).prop("disabled", false);
+                    $('.'+claseTime+'I').prop("disabled", false);
+                    $('.'+claseTime+'F').prop("disabled", false);
 
                 }
                 //Si el checkbox no es "tildado"
@@ -98,7 +112,8 @@
                     //alert('naditas')
 
                     //Le agrego la propiedad "disabled" a los time con esa clase
-                    $('.'+claseTime).prop("disabled", true);
+                    $('.'+claseTime+'I').prop("disabled", true);
+                    $('.'+claseTime+'F').prop("disabled", true);
                     
                     //Borro el valor que tiene el input "time"
                     $('.'+claseTime).val("")
@@ -106,6 +121,95 @@
                 }
 
             })
+        })
+
+
+        //Validar que input time no este vacio si checkbox es checked
+        //Cada vez que se encuentre un input vacio al recorrer el array "Dias"
+        //se agrega un elemento al array "vacios"
+        var vacios = []
+
+        $('#btnGuardar').click(function(e){
+            e.preventDefault()
+            
+            /*Limpio el array de para que cada vez que se itera solo esten los
+            valores que realmente esten vacios*/
+            vacios = []
+
+            //Itero sobre cada elemento de "Dias"
+            $(Dias).each(function(){
+
+                //Guardo la clase del checkbox
+                var clase = this.value
+
+                //Limpio el span que muestra mensaje de error de cada input
+                $('#'+clase).text('')
+
+                //Si el checkbox es "tildado"
+                if ($(this).is(":checked")){
+                    
+                    //Guardo el string que representa el nombre de la clase para
+                    //los inputs tipo time
+                    var itimeI = $('.'+clase+'I')
+                    var itimeF = $('.'+clase+'F')
+                    
+                    //si el input time está vacio
+                    if( (itimeI.val() == "") || (itimeF.val() == "") ){
+                        
+                        //Agrego un elemento a la lista vacios
+                        vacios.push($(this))
+                        console.clear()
+                        console.log('Vacios: '+vacios.length)
+                        
+                        //Le asigno al span un mensaje de error
+                        $('#'+clase).append('Completar Valores')
+                    
+                    // RANGO DE HORARIOS
+                    //Inicio
+                    }else if (itimeI.val()<"07:00"){
+                        vacios.push($(this))
+                        console.clear()
+                        console.log('iTimeI: '+vacios.length)
+                        $('#'+clase).append('El horario debe ser entre 7am y 10pm ')
+
+                    }else if (itimeI.val()>"22:00"){
+                        vacios.push($(this))
+                        console.clear()
+                        console.log('iTimeI: '+vacios.length)
+                        $('#'+clase).append('El horario debe ser entre 7am y 10pm ')
+                    
+                    //Fin
+                    }else if (itimeF.val()<"07:00"){
+                        vacios.push($(this))
+                        console.clear()
+                        console.log('iTimeF: '+vacios.length)
+                        $('#'+clase).append('El horario debe ser entre 7am y 10pm ')
+
+                    }else if (itimeF.val()>"22:00"){
+                        vacios.push($(this))
+                        console.clear()
+                        console.log('iTimeF: '+vacios.length)
+                        $('#'+clase).append('El horario debe ser entre 7am y 10pm ')
+
+                    }else if (itimeI.val()>itimeF.val()){
+                        vacios.push($(this))
+                        console.clear()
+                        console.log('ALVESRRRE: '+vacios.length)
+                        $('#'+clase).append('El Horario De Inicio Debe Ser Menor Al De Fin ')
+                    }
+                }
+                
+            })
+
+            //Si el array "vacios" no tiene elementos
+            if (vacios.length == 0){
+                //alert('enviado')
+
+                //Envio el formulario
+                $('#frmEdit').submit()
+                //alert('Sin Vacios')
+            }
+
         })
     </script>
 {% endblock jquery %}
