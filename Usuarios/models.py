@@ -61,6 +61,7 @@ class CursoAlumno(models.Model):
 
 class Profesor(models.Model):
     usr_profesor = models.OneToOneField(appUser, on_delete=models.CASCADE, primary_key=True)
+    dni = models.PositiveIntegerField(unique=True, validators=[MinValueValidator(20000000), MaxValueValidator(99999999)])
     telefono = models.CharField(max_length=20)
     #nombre = es el campo "first_name" de AbstractUser
     #apellido = es el campo "last_name" de AbstractUser

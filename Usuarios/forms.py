@@ -75,7 +75,10 @@ class frmUsuario(forms.ModelForm):
 class frmProfesor(forms.ModelForm):
     class Meta:
         model = Profesor
-        fields = ['telefono']
+        fields = [
+            'telefono',
+            'dni'
+            ]
 
 
 

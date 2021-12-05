@@ -190,6 +190,7 @@ def crearProfesor(request):
                 mail = request.POST.get('email')
                 pswd = str(nombre).lower()+str(apellido).lower()
                 tel = request.POST.get('telefono')
+                dni = request.POST.get('dni')
 
                 usuario = appUser(
                     first_name = nombre,
@@ -204,7 +205,8 @@ def crearProfesor(request):
 
                 profe = Profesor(
                     usr_profesor = usuario,
-                    telefono = tel
+                    telefono = tel,
+                    dni = dni
 
                 )
                 profe.save()
@@ -264,7 +266,7 @@ def editarProfesor(request, idUsr):
             usrPost = frmUsrProf(request.POST, instance=usr)
             proPost = frmProfesor(request.POST, instance=profe)
 
-            if usrPost.is_valid() and proPost.is_valid:
+            if usrPost.is_valid() and proPost.is_valid():
                 usrPost.save()
                 proPost.save()
                 return redirect('profesores')
