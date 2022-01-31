@@ -24,9 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$&uf%22&0e=@hd5bz!6^l@t27k-amksj$18ipbajd!(hwtqg6!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['cfp.rodrigoamc.com.ar']
 
 # Modelo que se usa para la autenticación
 AUTH_USER_MODEL = 'Usuarios.appUser'
@@ -98,6 +99,19 @@ DATABASES = {
     }
 }
 
+#En produccion
+""" DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cfpDB',
+        'USER': 'cfp',
+        'PASSWORD':'rodoman',
+        'HOST':'127.0.01',
+        'PORT':'3306'
+    }
+} """
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -138,8 +152,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
+
 # Url publica para archivos de tipo "media"
 MEDIA_URL = '/zMedia/'
+
+# Ruta de la carpeta "zMedia"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'zMedia/')
 
 # Ruta de la carpeta "zMedia"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'zMedia')
